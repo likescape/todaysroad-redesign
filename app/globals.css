@@ -196,6 +196,8 @@ button {
   border-radius: 999px;
   padding: 8px 20px 8px 9px;
   box-shadow: var(--shadow-float);
+  position: relative;
+  z-index: 1;
 }
 
 .brand-icon {
@@ -529,8 +531,11 @@ button {
   box-shadow: inset 0 0 0 1px rgba(16, 16, 16, 0.06);
 }
 
-.sheet-photo svg {
+.sheet-photo img {
   display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .sheet-more {
@@ -564,7 +569,6 @@ button {
   color: #fff;
   box-shadow: 0 24px 60px rgba(16, 16, 16, 0.4);
   overflow: hidden;
-  will-change: transform;
   word-break: keep-all;
 }
 
@@ -604,6 +608,8 @@ button {
   align-items: center;
   height: 46px;
   flex-shrink: 0;
+  /* 안쪽 패딩을 상쇄해 닫기 버튼이 패널 오른쪽 가장자리에 밀착되게 */
+  margin-right: -18px;
 }
 
 /* 하단 패널은 브랜드 버튼과 겹치지 않으므로 헤더 여백을 살짝 줄인다 */
@@ -619,7 +625,7 @@ button {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--ink);
   color: #fff;
   display: flex;
   align-items: center;
@@ -645,7 +651,7 @@ button {
   flex-direction: column;
   gap: 16px;
   min-height: 0;
-  padding-bottom: 20px;
+  padding: 4px 0 20px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -931,7 +937,7 @@ button {
 }
 
 .rp-lead {
-  margin: -4px 0 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);

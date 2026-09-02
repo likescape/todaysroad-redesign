@@ -100,7 +100,7 @@ export default function AppScreen() {
         </AnimatePresence>
 
         <header className="top-bar">
-          <BrandButton inverted={panel !== null} onClick={goHome} />
+          <BrandButton onPanel={panel !== null} onClick={goHome} />
           <TopActions panel={panel} onOpen={openPanel} />
         </header>
 

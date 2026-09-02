@@ -68,26 +68,9 @@ export default function CourseSheet({
           </div>
         </div>
         <div className="sheet-photo-wrap">
-          <div className="sheet-photo" role="img" aria-label="코스 사진">
-            <svg viewBox="0 0 100 100" width="100%" height="100%">
-              <defs>
-                <linearGradient id="sheet-sky" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#b6d9a0" />
-                  <stop offset="1" stopColor="#5d9c53" />
-                </linearGradient>
-              </defs>
-              <rect width="100" height="100" fill="url(#sheet-sky)" />
-              <path d="M42 100 L48 40 L52 40 L58 100 Z" fill="#d9d4c8" />
-              <path
-                d="M48.8 55 L51.2 55 M48 70 L52 70 M47 88 L53 88"
-                stroke="#a8a291"
-                strokeWidth="1.6"
-              />
-              <ellipse cx="20" cy="38" rx="14" ry="16" fill="#3f7a3c" />
-              <ellipse cx="80" cy="34" rx="15" ry="17" fill="#356f35" />
-              <ellipse cx="34" cy="24" rx="12" ry="13" fill="#4c8a45" />
-              <ellipse cx="66" cy="20" rx="12" ry="13" fill="#468243" />
-            </svg>
+          <div className="sheet-photo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/example-thumbnail.jpg" alt="코스 사진" draggable={false} />
           </div>
           <button type="button" className="sheet-more" aria-label="코스 상세 보기">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">

@@ -5,13 +5,14 @@ import { softSpring } from "@/lib/motion";
 
 /**
  * 좌상단 '오늘의길' 버튼. 어떤 팝업/화면에서도 유지되며,
- * 클릭하면 처음 화면으로 돌아간다. 검정 팝업 위에서는 색이 반전된다.
+ * 클릭하면 처음 화면으로 돌아간다. 검정 팝업 위에서도 검정 배경/흰 글씨를 유지하고,
+ * 팝업과 구분되도록 얇은 흰 테두리만 살짝 드러난다.
  */
 export default function BrandButton({
-  inverted,
+  onPanel,
   onClick,
 }: {
-  inverted: boolean;
+  onPanel: boolean;
   onClick: () => void;
 }) {
   return (
@@ -22,21 +23,19 @@ export default function BrandButton({
       onClick={onClick}
       initial={false}
       animate={{
-        backgroundColor: inverted ? "#ffffff" : "#101010",
-        color: inverted ? "#101010" : "#ffffff",
+        boxShadow: onPanel
+          ? "0 0 0 1.5px rgba(255,255,255,0.28), 0 6px 18px rgba(16,16,16,0)"
+          : "0 0 0 0px rgba(255,255,255,0), 0 6px 18px rgba(16,16,16,0.18)",
       }}
       whileTap={{ scale: 0.94 }}
       transition={softSpring}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <motion.img
+      <img
         src="/assets/icon.png"
         alt=""
         className="brand-icon"
         draggable={false}
-        initial={false}
-        animate={{ filter: inverted ? "invert(1)" : "invert(0)" }}
-        transition={{ duration: 0.25 }}
       />
       <span className="brand-label">오늘의길</span>
     </motion.button>
