@@ -1,0 +1,553 @@
+:root {
+  --ink: #101010;
+  --ink-soft: #4c4c4c;
+  --muted: #8a8a86;
+  --surface: #ffffff;
+  --screen-bg: #edebe4;
+  --shadow-card: 0 12px 30px rgba(16, 16, 16, 0.14);
+  --shadow-float: 0 6px 18px rgba(16, 16, 16, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: lightgray;
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  color: var(--ink);
+}
+
+button {
+  font-family: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* ===== 목업 프레임 스테이지 ===== */
+
+.stage {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lightgray;
+  overflow: hidden;
+}
+
+.device {
+  position: relative;
+  height: min(94dvh, 940px);
+  aspect-ratio: 851 / 1848;
+}
+
+.device-frame-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* mockup-frame.png(851x1848) 알파채널 실측 기준 화면 영역:
+   left 37 / top 35 / right 814 / bottom 1814, 코너 반경 약 108px */
+.screen {
+  position: absolute;
+  left: 4.348%;
+  top: 1.894%;
+  width: 91.422%;
+  height: 96.267%;
+  border-radius: 13.9% / 6.07%;
+  overflow: hidden;
+  background: var(--screen-bg);
+  z-index: 1;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 모바일 뷰포트: 프레임 제거, 전체 화면 */
+@media (max-width: 500px) {
+  .stage {
+    display: block;
+  }
+  .device {
+    width: 100vw;
+    height: 100dvh;
+    aspect-ratio: auto;
+  }
+  .device-frame-img {
+    display: none;
+  }
+  .screen {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+/* ===== 지도 ===== */
+
+.map-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.map-root {
+  width: 100%;
+  height: 100%;
+  filter: saturate(0.35) brightness(1.07) contrast(0.92);
+}
+
+.map-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ===== 상태바 ===== */
+
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 30px 0;
+  pointer-events: none;
+  color: var(--ink);
+}
+
+.status-time {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ===== 상단 바 ===== */
+
+.top-bar {
+  position: absolute;
+  top: 50px;
+  left: 16px;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.top-bar > * {
+  pointer-events: auto;
+}
+
+.brand-pill {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 20px 8px 9px;
+  box-shadow: var(--shadow-float);
+}
+
+.brand-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: block;
+}
+
+.brand-label {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.top-actions {
+  display: flex;
+  gap: 9px;
+}
+
+.icon-button {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-float);
+  transition: transform 0.15s ease;
+}
+
+.icon-button:active {
+  transform: scale(0.92);
+}
+
+/* ===== 하단 컨트롤 ===== */
+
+.bottom-controls {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 28px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.bottom-controls > * {
+  pointer-events: auto;
+}
+
+.recommend-button {
+  flex: 1;
+  height: 60px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s ease;
+}
+
+.recommend-button:active {
+  transform: scale(0.97);
+}
+
+.locate-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s ease;
+}
+
+.locate-button:active {
+  transform: scale(0.92);
+}
+
+@media (max-width: 500px) {
+  .bottom-controls {
+    bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== 현재 위치 마커 ===== */
+
+.current-marker {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-marker-pulse {
+  display: none;
+}
+
+.current-marker-dot {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* ===== 광흥창역 정차점 마커 ===== */
+
+.transit-stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.transit-stop i {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4.5px solid #0f0f0f;
+}
+
+.transit-stop span {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f0f0f;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.9),
+    0 -1px 2px rgba(255, 255, 255, 0.9);
+}
+
+/* ===== 추천 코스 마커 ===== */
+
+.course-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s ease;
+}
+
+.course-marker:active {
+  transform: scale(0.96);
+}
+
+.course-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.course-bubble-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.course-bubble-name i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.course-bubble-meta {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.course-bubble-tail {
+  width: 14px;
+  height: 8px;
+  background: var(--surface);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  margin-top: -1px;
+}
+
+.course-anchor {
+  margin-top: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-float);
+}
+
+.course-anchor i {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.course-marker.is-selected .course-bubble {
+  transform: scale(1.04);
+}
+
+.course-marker.is-selected .course-anchor i {
+  transform: scale(1.15);
+}
+
+/* ===== 추천 코스 시트 ===== */
+
+.course-sheet {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 102px;
+  z-index: 19;
+  background: var(--surface);
+  border-radius: 22px;
+  padding: 8px 18px 16px;
+  box-shadow: var(--shadow-card);
+  animation: sheet-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sheet-handle {
+  display: block;
+  width: 100%;
+  padding: 6px 0 10px;
+}
+
+.sheet-handle span {
+  display: block;
+  width: 30px;
+  height: 4px;
+  border-radius: 999px;
+  background: #d9d7d2;
+  margin: 0 auto;
+}
+
+.sheet-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.sheet-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sheet-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sheet-title {
+  margin: 0 0 11px;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.sheet-chips {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #e3e3e3;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  white-space: nowrap;
+}
+
+.sheet-desc {
+  margin: 12px 0 0;
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sheet-photo-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sheet-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(16, 16, 16, 0.06);
+}
+
+.sheet-photo svg {
+  display: block;
+}
+
+.sheet-more {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-float);
+}
