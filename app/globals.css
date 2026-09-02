@@ -117,6 +117,16 @@ button {
   width: 100%;
   height: 100%;
   filter: saturate(0.35) brightness(1.07) contrast(0.92);
+  transition: filter 0.45s ease;
+}
+
+.app[data-map-style="mono"] .map-root {
+  filter: grayscale(1) contrast(0.95) brightness(1.04);
+}
+
+.app[data-map-style="dark"] .map-root {
+  filter: invert(0.92) hue-rotate(180deg) grayscale(0.45) contrast(0.9)
+    brightness(0.95);
 }
 
 .map-fallback {
@@ -166,7 +176,7 @@ button {
   top: 50px;
   left: 16px;
   right: 16px;
-  z-index: 20;
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -204,6 +214,12 @@ button {
 .top-actions {
   display: flex;
   gap: 9px;
+  /* 패널이 열리면 이 컨테이너가 닫기 버튼 위에 남으므로 자식 버튼만 클릭을 받는다 */
+  pointer-events: none;
+}
+
+.top-actions > * {
+  pointer-events: auto;
 }
 
 .icon-button {
@@ -216,11 +232,6 @@ button {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-float);
-  transition: transform 0.15s ease;
-}
-
-.icon-button:active {
-  transform: scale(0.92);
 }
 
 /* ===== 하단 컨트롤 ===== */
@@ -255,11 +266,13 @@ button {
   justify-content: center;
   gap: 9px;
   box-shadow: var(--shadow-card);
-  transition: transform 0.15s ease;
 }
 
-.recommend-button:active {
-  transform: scale(0.97);
+.recommend-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
 }
 
 .locate-button {
@@ -273,11 +286,6 @@ button {
   justify-content: center;
   flex-shrink: 0;
   box-shadow: var(--shadow-card);
-  transition: transform 0.15s ease;
-}
-
-.locate-button:active {
-  transform: scale(0.92);
 }
 
 @media (max-width: 500px) {
@@ -435,18 +443,6 @@ button {
   border-radius: 22px;
   padding: 8px 18px 16px;
   box-shadow: var(--shadow-card);
-  animation: sheet-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-
-@keyframes sheet-in {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .sheet-handle {
@@ -550,4 +546,455 @@ button {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-float);
+}
+
+/* ===== 아일랜드 패널 (다이나믹 아일랜드 모핑) ===== */
+
+.island-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  background: rgba(16, 16, 16, 0.28);
+}
+
+.island-panel {
+  position: absolute;
+  z-index: 30;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 24px 60px rgba(16, 16, 16, 0.4);
+  overflow: hidden;
+  will-change: transform;
+  word-break: keep-all;
+}
+
+/* 상단 패널: 하단 '코스 추천받기' 버튼(bottom 28 + 60px) 위에서 멈춘다 */
+.island-panel--top {
+  top: 50px;
+  left: 16px;
+  right: 16px;
+  max-height: calc(100% - 50px - 104px);
+}
+
+.island-panel--bottom {
+  left: 18px;
+  right: 18px;
+  bottom: 28px;
+  max-height: calc(100% - 120px);
+}
+
+@media (max-width: 500px) {
+  .island-panel--bottom {
+    bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+}
+
+.island-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 18px 0;
+  max-height: inherit;
+  overflow: hidden;
+}
+
+.island-head {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 46px;
+  flex-shrink: 0;
+}
+
+/* 하단 패널은 브랜드 버튼과 겹치지 않으므로 헤더 여백을 살짝 줄인다 */
+.island-panel--bottom .island-inner {
+  padding-top: 8px;
+}
+
+.island-panel--bottom .island-head {
+  height: 40px;
+}
+
+.island-close {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.island-panel--bottom .island-close {
+  width: 40px;
+  height: 40px;
+}
+
+.island-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.island-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  padding-bottom: 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.island-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== 세그먼트 컨트롤 ===== */
+
+.segmented {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.segmented-item {
+  position: relative;
+  flex: 1;
+  height: 40px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.segmented-item.is-active {
+  color: var(--ink);
+}
+
+.segmented-thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.segmented-label {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== 토글 ===== */
+
+.toggle {
+  width: 52px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: background 0.2s ease;
+}
+
+.toggle.is-on {
+  background: #fff;
+  justify-content: flex-end;
+}
+
+.toggle-knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toggle.is-on .toggle-knob {
+  background: var(--ink);
+}
+
+/* ===== 공용 행 (알림/설정) ===== */
+
+.np-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  list-style: none;
+}
+
+.np-emoji {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.np-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.np-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.np-desc {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ===== 알림 패널 ===== */
+
+.np {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.np-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.06)
+  );
+}
+
+.np-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #9be29b;
+}
+
+.np-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9be29b;
+  display: block;
+}
+
+.np-hero-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.np-hero-meta {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.np-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.np-count {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.np-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.np-quiet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ===== 설정 패널 ===== */
+
+.sp {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sp-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sp-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.sp-name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.sp-badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sp-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sp-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+}
+
+.sp-toggle-row {
+  padding: 4px 0;
+}
+
+.sp-footer {
+  margin: 4px 0 0;
+  font-size: 12px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ===== 코스 추천 패널 ===== */
+
+.rp {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rp-lead {
+  margin: -4px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rp-hint {
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.rp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rp-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.rp-summary {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rp-submit {
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.rp-submit:disabled {
+  cursor: default;
 }

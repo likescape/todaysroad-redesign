@@ -20,6 +20,7 @@ export default function BrandButton({
       className="brand-pill"
       aria-label="처음 화면으로 돌아가기"
       onClick={onClick}
+      initial={false}
       animate={{
         backgroundColor: inverted ? "#ffffff" : "#101010",
         color: inverted ? "#101010" : "#ffffff",
@@ -33,6 +34,7 @@ export default function BrandButton({
         alt=""
         className="brand-icon"
         draggable={false}
+        initial={false}
         animate={{ filter: inverted ? "invert(1)" : "invert(0)" }}
         transition={{ duration: 0.25 }}
       />

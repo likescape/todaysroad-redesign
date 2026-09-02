@@ -65,25 +65,31 @@ export default function RecommendPanel({
           {TAGS.map((tag, i) => {
             const active = tags.includes(tag.id);
             return (
-              <motion.button
+              // 바깥 래퍼가 등장 스태거만 담당하고, 버튼 자체는 지연 없이 즉시 반응한다
+              <motion.div
                 key={tag.id}
-                type="button"
-                className={`rp-tag${active ? " is-active" : ""}`}
-                aria-pressed={active}
-                onClick={() => toggleTag(tag.id)}
                 initial={{ opacity: 0, scale: 0.85 }}
-                animate={{
-                  opacity: 1,
-                  scale: active ? 1.04 : 1,
-                  backgroundColor: active ? "#ffffff" : "rgba(255,255,255,0.1)",
-                  color: active ? "#101010" : "#ffffff",
-                }}
-                whileTap={{ scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ ...softSpring, delay: 0.24 + i * 0.03 }}
               >
-                <span aria-hidden>{tag.emoji}</span>
-                {tag.label}
-              </motion.button>
+                <motion.button
+                  type="button"
+                  className={`rp-tag${active ? " is-active" : ""}`}
+                  aria-pressed={active}
+                  onClick={() => toggleTag(tag.id)}
+                  initial={false}
+                  animate={{
+                    scale: active ? 1.04 : 1,
+                    backgroundColor: active ? "#ffffff" : "rgba(255,255,255,0.1)",
+                    color: active ? "#101010" : "#ffffff",
+                  }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={softSpring}
+                >
+                  <span aria-hidden>{tag.emoji}</span>
+                  {tag.label}
+                </motion.button>
+              </motion.div>
             );
           })}
         </div>

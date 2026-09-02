@@ -50,7 +50,7 @@ export default function TopActions({
           layoutId="island-notifications"
           className="icon-button"
           aria-label="알림"
-          style={{ borderRadius: 23 }}
+          style={{ borderRadius: 23, pointerEvents: dimmed ? "none" : "auto" }}
           animate={{ opacity: dimmed ? 0 : 1, scale: dimmed ? 0.8 : 1 }}
           whileTap={{ scale: 0.9 }}
           transition={islandSpring}
@@ -65,7 +65,7 @@ export default function TopActions({
           layoutId="island-settings"
           className="icon-button"
           aria-label="설정"
-          style={{ borderRadius: 23 }}
+          style={{ borderRadius: 23, pointerEvents: dimmed ? "none" : "auto" }}
           animate={{ opacity: dimmed ? 0 : 1, scale: dimmed ? 0.8 : 1 }}
           whileTap={{ scale: 0.9 }}
           transition={islandSpring}

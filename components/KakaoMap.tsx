@@ -11,6 +11,8 @@ import { CURRENT_LOCATION, MAP_CENTER, type Course } from "@/lib/courses";
 
 export interface KakaoMapHandle {
   moveToCurrentLocation: () => void;
+  /** 초기 중심·줌으로 복귀 ('오늘의길' 버튼) */
+  resetView: () => void;
 }
 
 interface KakaoMapProps {
@@ -25,6 +27,8 @@ declare global {
     __kakaoSdkPromise?: Promise<any>;
   }
 }
+
+const INITIAL_LEVEL = 4;
 
 const KAKAO_APP_KEY =
   process.env.NEXT_PUBLIC_KAKAO_MAP_KEY ?? "c27a21ad128ccdc8bc1b3ec50662e18b";
@@ -104,7 +108,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
 
         const map = new kakao.maps.Map(containerRef.current, {
           center: new kakao.maps.LatLng(MAP_CENTER.lat, MAP_CENTER.lng),
-          level: 4,
+          level: INITIAL_LEVEL,
         });
         map.setDraggable(true);
         map.setZoomable(true);
@@ -205,6 +209,13 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
   }, [selectedCourseId]);
 
   useImperativeHandle(ref, () => ({
+    resetView() {
+      const map = mapRef.current;
+      const kakao = window.kakao;
+      if (!map || !kakao) return;
+      if (map.getLevel() !== INITIAL_LEVEL) map.setLevel(INITIAL_LEVEL, { animate: true });
+      map.panTo(new kakao.maps.LatLng(MAP_CENTER.lat, MAP_CENTER.lng));
+    },
     moveToCurrentLocation() {
       const map = mapRef.current;
       const kakao = window.kakao;
