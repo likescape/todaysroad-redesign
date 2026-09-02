@@ -1,6 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import type { Course } from "@/lib/courses";
+import { islandSpring } from "@/lib/motion";
 
 export default function CourseSheet({
   course,
@@ -10,7 +12,14 @@ export default function CourseSheet({
   onClose: () => void;
 }) {
   return (
-    <section className="course-sheet" aria-label="추천 코스 정보">
+    <motion.section
+      className="course-sheet"
+      aria-label="추천 코스 정보"
+      initial={{ y: 48, opacity: 0, scale: 0.96 }}
+      animate={{ y: 0, opacity: 1, scale: 1 }}
+      exit={{ y: 36, opacity: 0, scale: 0.97, transition: { duration: 0.18 } }}
+      transition={islandSpring}
+    >
       <button
         type="button"
         className="sheet-handle"
@@ -94,6 +103,6 @@ export default function CourseSheet({
         </div>
       </div>
       <p className="sheet-desc">{course.description}</p>
-    </section>
+    </motion.section>
   );
 }
