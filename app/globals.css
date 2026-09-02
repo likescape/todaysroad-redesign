@@ -538,21 +538,6 @@ button {
   object-fit: cover;
 }
 
-.sheet-more {
-  position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-float);
-}
-
 /* ===== 아일랜드 패널 (다이나믹 아일랜드 모핑) ===== */
 
 .island-scrim {
