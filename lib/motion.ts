@@ -9,37 +9,48 @@ export const islandSpring: Transition = {
 };
 
 /**
- * 버블처럼 형태가 꿈틀거리는 변형. 레이아웃 모핑(크기 변화)과 동시에 재생되며
- * 네 모서리 반경이 서로 다르게 출렁이고, 가로/세로가 번갈아 눌렸다 늘어난다.
- * 최종 값은 모두 원래 형태(반경 30, 스케일 1)로 수렴한다.
+ * 패널 크기 변화(layout)용 스프링. 목표 크기를 살짝 넘겼다가 돌아오는 Overshoot.
+ */
+export const islandLayoutSpring: Transition = {
+  type: "spring",
+  stiffness: 300,
+  damping: 26,
+  mass: 0.9,
+};
+
+/**
+ * 뭉게뭉게 부풀며 커지는 Blob + Squish 변형. 레이아웃 모핑과 동시에 재생된다.
+ * - Blob: 네 모서리 반경이 서로 다르게 크게 부풀었다가 박스(반경 30)로 정착
+ * - Squish: 가로/세로가 번갈아 눌렸다 늘어남 (젤리)
+ * 최종 값은 모두 원래 형태로 수렴한다.
  */
 const R = 30;
-export const islandWobble = {
+export const islandBlob = {
   enter: {
-    scaleX: [1, 1.045, 0.97, 1.015, 0.995, 1],
-    scaleY: [1, 0.955, 1.035, 0.985, 1.005, 1],
-    borderTopLeftRadius: [R, 52, 22, 40, 27, R],
-    borderTopRightRadius: [R, 20, 50, 26, 34, R],
-    borderBottomRightRadius: [R, 54, 24, 38, 28, R],
-    borderBottomLeftRadius: [R, 24, 48, 28, 33, R],
+    scaleX: [0.94, 1.06, 0.975, 1.012, 1],
+    scaleY: [0.9, 1.05, 0.97, 1.01, 1],
+    borderTopLeftRadius: [R, 120, 44, 62, R],
+    borderTopRightRadius: [R, 70, 130, 40, R],
+    borderBottomRightRadius: [R, 130, 50, 58, R],
+    borderBottomLeftRadius: [R, 60, 118, 42, R],
   },
   exit: {
-    scaleX: [1, 0.965, 1.03, 0.99, 1],
-    scaleY: [1, 1.04, 0.97, 1.01, 1],
-    borderTopLeftRadius: [R, 22, 46, 28, R],
-    borderTopRightRadius: [R, 48, 24, 34, R],
-    borderBottomRightRadius: [R, 24, 44, 28, R],
-    borderBottomLeftRadius: [R, 46, 22, 32, R],
+    scaleX: [1, 1.03, 0.96, 1],
+    scaleY: [1, 0.96, 1.04, 1],
+    borderTopLeftRadius: [R, 90, 46, R],
+    borderTopRightRadius: [R, 48, 96, R],
+    borderBottomRightRadius: [R, 96, 44, R],
+    borderBottomLeftRadius: [R, 52, 88, R],
   },
   enterTransition: {
-    duration: 0.85,
-    times: [0, 0.18, 0.4, 0.62, 0.82, 1],
-    ease: "easeInOut",
+    duration: 0.95,
+    times: [0, 0.28, 0.55, 0.8, 1],
+    ease: [0.22, 1, 0.36, 1],
   } as Transition,
   exitTransition: {
-    duration: 0.45,
-    times: [0, 0.3, 0.6, 0.85, 1],
-    ease: "easeInOut",
+    duration: 0.42,
+    times: [0, 0.35, 0.7, 1],
+    ease: [0.22, 1, 0.36, 1],
   } as Transition,
 };
 

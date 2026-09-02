@@ -40,7 +40,8 @@ export default function TopActions({
   panel: Panel;
   onOpen: (panel: Exclude<Panel, null>) => void;
 }) {
-  const dimmed = panel === "notifications" || panel === "settings";
+  // 어떤 패널이든 열리면 상단 버튼은 숨긴다 (닫기 버튼이 그 자리를 차지)
+  const dimmed = panel !== null;
 
   return (
     <div className="top-actions">

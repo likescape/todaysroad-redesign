@@ -626,6 +626,8 @@ button {
 .island-panel {
   position: absolute;
   z-index: 30;
+  display: flex;
+  flex-direction: column;
   background: var(--ink);
   color: #fff;
   box-shadow: 0 24px 60px rgba(16, 16, 16, 0.4);
@@ -641,6 +643,15 @@ button {
   max-height: calc(100% - 50px - 104px);
 }
 
+/* 꽉 채우는 패널(코스 추천): 같은 y 위치에서 하단 컨트롤 위까지 */
+.island-panel--fill {
+  height: calc(100% - 50px - 104px);
+}
+
+.island-panel--fill .island-body {
+  flex: 1;
+}
+
 .island-panel--bottom {
   left: 18px;
   right: 18px;
@@ -654,12 +665,14 @@ button {
   }
 }
 
+/* 패널(flex column, max-height 제한) 안에서 남은 높이만큼만 차지하고 본문이 스크롤된다 */
 .island-inner {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 0 18px 0;
-  max-height: inherit;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -994,7 +1007,8 @@ button {
 .rp {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
+  flex: 1;
 }
 
 .rp-lead {
@@ -1014,14 +1028,14 @@ button {
 .rp-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
 }
 
 .rp-tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 14px;
+  padding: 9px 13px;
   border-radius: 999px;
   font-size: 15px;
   font-weight: 700;
@@ -1035,7 +1049,8 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 2px;
+  margin-top: auto;
+  padding-top: 8px;
 }
 
 .rp-summary {

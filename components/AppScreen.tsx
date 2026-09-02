@@ -158,7 +158,8 @@ export default function AppScreen() {
             <IslandPanel
               key="recommend"
               layoutId="island-recommend"
-              anchor="bottom"
+              anchor="top"
+              fill
               title="코스 추천"
               onClose={closePanel}
             >
