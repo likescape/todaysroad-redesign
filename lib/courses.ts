@@ -12,6 +12,10 @@ export interface Course {
   description: string;
   lat: number;
   lng: number;
+  /** '코스 추천받기'로 방금 만들어진 코스 */
+  generated?: boolean;
+  /** 지도에 그릴 산책 경로 (생성 코스만) */
+  path?: { lat: number; lng: number }[];
 }
 
 export const COURSES: Course[] = [

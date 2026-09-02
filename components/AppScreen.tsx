@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { COURSES, type Course } from "@/lib/courses";
 import type { MapStyle, Panel, RecommendPrefs } from "@/lib/types";
+import { generateCourse } from "@/lib/recommend";
 import KakaoMap, { type KakaoMapHandle } from "./KakaoMap";
 import StatusBar from "./StatusBar";
 import BrandButton from "./BrandButton";
@@ -15,13 +16,27 @@ import RecommendPanel from "./RecommendPanel";
 import CourseSheet from "./CourseSheet";
 import BottomControls from "./BottomControls";
 
+/** 지도 위 경로 그리기 애니메이션 길이 */
+const ROUTE_DRAW_MS = 1600;
+
 export default function AppScreen() {
   const mapRef = useRef<KakaoMapHandle>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [panel, setPanel] = useState<Panel>(null);
   const [mapStyle, setMapStyle] = useState<MapStyle>("light");
-  // 추천 패널이 수축된 뒤에 보여줄 코스 (AnimatePresence onExitComplete에서 소비)
-  const pendingCourseRef = useRef<Course | null>(null);
+  // 지도에 그려진 생성 코스 경로와 '만드는 중' 연출 상태
+  const [route, setRoute] = useState<Course["path"] | null>(null);
+  const [generating, setGenerating] = useState(false);
+  // 추천 패널이 수축된 뒤에 처리할 조건 (AnimatePresence onExitComplete에서 소비)
+  const pendingPrefsRef = useRef<RecommendPrefs | null>(null);
+  const generateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (generateTimerRef.current) clearTimeout(generateTimerRef.current);
+    },
+    []
+  );
 
   const handleSelectCourse = useCallback((course: Course | null) => {
     setSelectedCourse(course);
@@ -40,29 +55,39 @@ export default function AppScreen() {
 
   // '오늘의길' 버튼: 어떤 상태에서든 처음 화면으로
   const goHome = useCallback(() => {
-    pendingCourseRef.current = null;
+    pendingPrefsRef.current = null;
+    if (generateTimerRef.current) clearTimeout(generateTimerRef.current);
+    setGenerating(false);
+    setRoute(null);
     setPanel(null);
     setSelectedCourse(null);
     mapRef.current?.resetView();
   }, []);
 
-  // 목업: 희망 시간에 가장 가까운 코스를 추천한다. 패널이 버튼으로 줄어든 뒤 시트가 올라온다.
+  // 추천 조건을 보관하고 패널을 닫는다. 실제 생성은 패널이 버튼으로 줄어든 뒤 시작.
   const handleRecommendSubmit = useCallback((prefs: RecommendPrefs) => {
-    const minutesOf = (c: Course) => parseInt(c.duration, 10) || 0;
-    const match = [...COURSES].sort(
-      (a, b) =>
-        Math.abs(minutesOf(a) - prefs.minutes) -
-        Math.abs(minutesOf(b) - prefs.minutes)
-    )[0];
-    pendingCourseRef.current = match;
+    pendingPrefsRef.current = prefs;
     setPanel(null);
   }, []);
 
+  // 패널 수축 완료 → '만드는 중' 필 + 지도에 경로가 그려짐 → 코스 시트 등장
   const handlePanelExitComplete = useCallback(() => {
-    if (pendingCourseRef.current) {
-      setSelectedCourse(pendingCourseRef.current);
-      pendingCourseRef.current = null;
-    }
+    const prefs = pendingPrefsRef.current;
+    if (!prefs) return;
+    pendingPrefsRef.current = null;
+
+    const origin = mapRef.current?.getCurrentPosition() ?? {
+      lat: COURSES[0].lat,
+      lng: COURSES[0].lng,
+    };
+    const course = generateCourse(origin, prefs);
+    setSelectedCourse(null);
+    setGenerating(true);
+    setRoute(course.path ?? null);
+    generateTimerRef.current = setTimeout(() => {
+      setGenerating(false);
+      setSelectedCourse(course);
+    }, ROUTE_DRAW_MS + 250);
   }, []);
 
   useEffect(() => {
@@ -82,6 +107,8 @@ export default function AppScreen() {
           courses={COURSES}
           selectedCourseId={selectedCourse?.id ?? null}
           onSelectCourse={handleSelectCourse}
+          route={route}
+          routeDrawMs={ROUTE_DRAW_MS}
         />
         <StatusBar />
 
@@ -137,6 +164,47 @@ export default function AppScreen() {
             >
               <RecommendPanel onSubmit={handleRecommendSubmit} />
             </IslandPanel>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {generating && (
+            <motion.div
+              key="generating"
+              className="generating-pill"
+              role="status"
+              initial={{ opacity: 0, y: 24, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.94, transition: { duration: 0.16 } }}
+              transition={{ type: "spring", stiffness: 420, damping: 30 }}
+            >
+              <motion.svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                animate={{ rotate: [0, 20, -12, 0], scale: [1, 1.2, 0.95, 1] }}
+                transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <path d="M12 2.5c.5 3.9 2 6.6 5.5 7.5-3.5.9-5 3.6-5.5 7.5-.5-3.9-2-6.6-5.5-7.5 3.5-.9 5-3.6 5.5-7.5z" />
+                <path d="M19 13.5c.3 2.1 1.1 3.5 3 4-1.9.5-2.7 1.9-3 4-.3-2.1-1.1-3.5-3-4 1.9-.5 2.7-1.9 3-4z" />
+              </motion.svg>
+              오늘의 코스를 만들고 있어요
+              <span className="generating-dots">
+                {[0, 1, 2].map((i) => (
+                  <motion.i
+                    key={i}
+                    animate={{ opacity: [0.2, 1, 0.2], y: [0, -3, 0] }}
+                    transition={{
+                      duration: 0.9,
+                      repeat: Infinity,
+                      delay: i * 0.15,
+                      ease: "easeInOut",
+                    }}
+                  />
+                ))}
+              </span>
+            </motion.div>
           )}
         </AnimatePresence>
 

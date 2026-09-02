@@ -33,7 +33,7 @@ export default function CourseSheet({
           <path d="M12 2.5c.5 3.9 2 6.6 5.5 7.5-3.5.9-5 3.6-5.5 7.5-.5-3.9-2-6.6-5.5-7.5 3.5-.9 5-3.6 5.5-7.5z" />
           <path d="M19.5 14c.3 1.8 1 3 2.5 3.4-1.5.4-2.2 1.6-2.5 3.4-.3-1.8-1-3-2.5-3.4 1.5-.4 2.2-1.6 2.5-3.4z" />
         </svg>
-        추천 코스
+        {course.generated ? "방금 만든 오늘의 코스" : "추천 코스"}
       </div>
       <div className="sheet-body">
         <div className="sheet-info">

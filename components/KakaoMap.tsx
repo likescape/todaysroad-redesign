@@ -13,12 +13,18 @@ export interface KakaoMapHandle {
   moveToCurrentLocation: () => void;
   /** 초기 중심·줌으로 복귀 ('오늘의길' 버튼) */
   resetView: () => void;
+  /** 현재 위치 마커가 놓인 좌표 */
+  getCurrentPosition: () => { lat: number; lng: number };
 }
 
 interface KakaoMapProps {
   courses: Course[];
   selectedCourseId: string | null;
   onSelectCourse: (course: Course | null) => void;
+  /** 생성된 산책 경로 — 바뀌면 지도 위에 선이 그려지는 애니메이션이 재생된다 */
+  route?: { lat: number; lng: number }[] | null;
+  /** 경로 그리기 애니메이션 길이(ms) */
+  routeDrawMs?: number;
 }
 
 declare global {
@@ -85,7 +91,7 @@ function createCourseEl(course: Course, onClick: () => void) {
 }
 
 const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
-  { courses, selectedCourseId, onSelectCourse },
+  { courses, selectedCourseId, onSelectCourse, route = null, routeDrawMs = 1600 },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -94,6 +100,8 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
   const currentOverlayRef = useRef<any>(null);
   const courseElsRef = useRef<Map<string, HTMLElement>>(new Map());
   const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
+  const routeRef = useRef<{ halo: any; line: any; turn: any } | null>(null);
 
   const onSelectRef = useRef(onSelectCourse);
   onSelectRef.current = onSelectCourse;
@@ -145,23 +153,6 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
           overlays.push(overlay);
         });
 
-        // 시안의 검은 코스 라인 (광흥창역을 지나는 산책 경로)
-        const linePath = [
-          [37.5468, 126.924],
-          [37.5475, 126.9319],
-          [37.5465, 126.937],
-          [37.5476, 126.943],
-        ].map(([lat, lng]) => new kakao.maps.LatLng(lat, lng));
-        const courseLine = new kakao.maps.Polyline({
-          path: linePath,
-          strokeWeight: 4,
-          strokeColor: "#0f0f0f",
-          strokeOpacity: 0.9,
-          strokeStyle: "solid",
-        });
-        courseLine.setMap(map);
-        overlays.push(courseLine);
-
         // 광흥창역 정차점 마커
         const stopEl = document.createElement("div");
         stopEl.className = "transit-stop";
@@ -188,6 +179,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
         });
         resizeObserver.observe(containerRef.current);
         overlays.push({ setMap: () => resizeObserver.disconnect() });
+        setReady(true);
       })
       .catch(() => {
         if (!cancelled) setFailed(true);
@@ -198,8 +190,101 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
       overlays.forEach((o) => o.setMap(null));
       courseElsRef.current.clear();
       mapRef.current = null;
+      setReady(false);
     };
   }, [courses]);
+
+  // 생성된 경로를 출발점부터 차례로 그려 나간다
+  useEffect(() => {
+    const map = mapRef.current;
+    const kakao = window.kakao;
+    if (!ready || !map || !kakao) return;
+
+    routeRef.current?.halo.setMap(null);
+    routeRef.current?.line.setMap(null);
+    routeRef.current?.turn.setMap(null);
+    routeRef.current = null;
+    if (!route || route.length < 2) return;
+
+    const toLatLng = (p: { lat: number; lng: number }) =>
+      new kakao.maps.LatLng(p.lat, p.lng);
+    const halo = new kakao.maps.Polyline({
+      path: [],
+      strokeWeight: 10,
+      strokeColor: "#ffffff",
+      strokeOpacity: 0.95,
+      strokeStyle: "solid",
+      zIndex: 1,
+    });
+    const line = new kakao.maps.Polyline({
+      path: [],
+      strokeWeight: 4.5,
+      strokeColor: "#0f0f0f",
+      strokeOpacity: 0.95,
+      strokeStyle: "solid",
+      zIndex: 2,
+    });
+    halo.setMap(map);
+    line.setMap(map);
+
+    // 반환점: 출발점에서 가장 먼 지점
+    const origin = route[0];
+    let far = route[0];
+    let farD = 0;
+    route.forEach((p) => {
+      const d = (p.lat - origin.lat) ** 2 + (p.lng - origin.lng) ** 2;
+      if (d > farD) {
+        farD = d;
+        far = p;
+      }
+    });
+    const turnEl = document.createElement("div");
+    turnEl.className = "route-turn";
+    turnEl.innerHTML = `<i></i><span>반환점</span>`;
+    const turn = new kakao.maps.CustomOverlay({
+      position: toLatLng(far),
+      content: turnEl,
+      yAnchor: 0.5,
+      zIndex: 2,
+    });
+    routeRef.current = { halo, line, turn };
+
+    // 경로 전체가 보이도록 맞춘 뒤, 하단 시트에 가리지 않게 살짝 위로 올린다
+    const bounds = new kakao.maps.LatLngBounds();
+    route.forEach((p) => bounds.extend(toLatLng(p)));
+    map.setBounds(bounds);
+    map.panBy(0, 120);
+
+    // 점 사이를 보간하며 선을 늘려 나간다
+    const segs = route.length - 1;
+    const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / routeDrawMs);
+      const pos = ease(t) * segs;
+      const idx = Math.floor(pos);
+      const frac = pos - idx;
+      const path = route.slice(0, idx + 1).map(toLatLng);
+      if (idx < segs) {
+        const a = route[idx];
+        const b = route[idx + 1];
+        path.push(
+          toLatLng({
+            lat: a.lat + (b.lat - a.lat) * frac,
+            lng: a.lng + (b.lng - a.lng) * frac,
+          })
+        );
+      }
+      halo.setPath(path);
+      line.setPath(path);
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else turn.setMap(map);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(raf);
+  }, [route, ready, routeDrawMs]);
 
   // 선택된 코스 마커 강조
   useEffect(() => {
@@ -209,6 +294,9 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
   }, [selectedCourseId]);
 
   useImperativeHandle(ref, () => ({
+    getCurrentPosition() {
+      return { ...currentPosRef.current };
+    },
     resetView() {
       const map = mapRef.current;
       const kakao = window.kakao;

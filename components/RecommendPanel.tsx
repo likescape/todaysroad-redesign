@@ -5,21 +5,10 @@ import { motion } from "motion/react";
 import Segmented from "./Segmented";
 import { softSpring, staggerItem } from "@/lib/motion";
 import type { RecommendPrefs } from "@/lib/types";
+import { MOOD_TAGS as TAGS } from "@/lib/recommend";
 
 const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 120];
 
-const TAGS = [
-  { id: "nature", emoji: "🌿", label: "자연적인" },
-  { id: "urban", emoji: "🏙️", label: "도시적인" },
-  { id: "quiet", emoji: "🤫", label: "조용한" },
-  { id: "lively", emoji: "🎉", label: "활기찬" },
-  { id: "river", emoji: "🌊", label: "강변" },
-  { id: "alley", emoji: "🏘️", label: "골목길" },
-  { id: "night", emoji: "🌙", label: "야경" },
-  { id: "cafe", emoji: "☕", label: "카페 투어" },
-  { id: "hill", emoji: "⛰️", label: "언덕" },
-  { id: "flat", emoji: "🚶", label: "평지" },
-];
 
 export default function RecommendPanel({
   onSubmit,

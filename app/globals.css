@@ -351,6 +351,82 @@ button {
     0 -1px 2px rgba(255, 255, 255, 0.9);
 }
 
+/* ===== 생성 코스: 반환점 마커 & 만드는 중 필 ===== */
+
+.route-turn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  animation: route-turn-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+
+@keyframes route-turn-in {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.route-turn i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4.5px solid #0f0f0f;
+}
+
+.route-turn span {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f0f0f;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.9),
+    0 -1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.generating-pill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 110px;
+  margin: 0 auto;
+  width: max-content;
+  z-index: 19;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 50px;
+  padding: 0 20px 0 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: var(--shadow-card);
+}
+
+.generating-dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: -4px;
+}
+
+.generating-dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  display: block;
+}
+
 /* ===== 추천 코스 마커 ===== */
 
 .course-marker {
