@@ -1223,16 +1223,15 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
   .bottom-controls .recommend-button { flex-basis: 170px; }
 }
 
-/* Integrate the brand into the recommendation surface, without a floating pill. */
-.island-head--branded {
-  justify-content: space-between;
-  height: 44px;
-  margin: 10px 0 0;
+/* Keep the original brand button mounted above the expanding panel.
+   Only its floating surface fades; the logo never leaves or reappears. */
+.brand-pill { background: transparent; box-shadow: none; isolation: isolate; }
+.brand-surface {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #fff;
+  box-shadow: var(--shadow-float);
+  pointer-events: none;
 }
-.island-head--branded .brand-pill {
-  padding: 0;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-}
-.island-head--branded .island-close { background: transparent; }

@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import BrandButton from "./BrandButton";
 import type { ReactNode } from "react";
 import { contentReveal, islandBlob, islandLayoutSpring } from "@/lib/motion";
 
@@ -18,7 +17,6 @@ export default function IslandPanel({
   fill = false,
   title,
   onClose,
-  onHome,
   children,
 }: {
   layoutId: string;
@@ -26,7 +24,6 @@ export default function IslandPanel({
   fill?: boolean;
   title: string;
   onClose: () => void;
-  onHome?: () => void;
   children: ReactNode;
 }) {
   return (
@@ -49,8 +46,7 @@ export default function IslandPanel({
         exit={contentReveal.exit}
         transition={contentReveal.transition}
       >
-        <header className={`island-head${onHome ? " island-head--branded" : ""}`}>
-          {onHome && <BrandButton onClick={onHome} />}
+        <header className="island-head">
           <motion.button
             type="button"
             className="island-close"
