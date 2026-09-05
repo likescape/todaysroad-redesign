@@ -1181,18 +1181,18 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
 
 /* Bottom navigation: walking actions sit above the restored tabs. */
 .bottom-controls {
-  bottom: calc(98px + env(safe-area-inset-bottom));
+  bottom: calc(124px + env(safe-area-inset-bottom));
   left: 16px;
   right: 16px;
   justify-content: center;
 }
-.bottom-controls .recommend-button { flex: 0 1 212px; max-width: calc(100% - 104px); height: 66px; font-size: 20px; }
+.bottom-controls .recommend-button { flex: 0 1 212px; max-width: calc(100% - 104px); height: 68px; font-size: 20px; }
 .bottom-controls .recommend-label svg { width: 28px; height: 28px; }
 .bottom-controls .locate-button { position: absolute; right: 0; }
-.course-sheet, .generating-pill { bottom: calc(174px + env(safe-area-inset-bottom)); }
-.profile-content { bottom: calc(94px + env(safe-area-inset-bottom)); }
-.island-panel--top { max-height: calc(100% - 215px - env(safe-area-inset-bottom)); }
-.island-panel--fill { height: calc(100% - 215px - env(safe-area-inset-bottom)); }
+.course-sheet, .generating-pill { bottom: calc(204px + env(safe-area-inset-bottom)); }
+.profile-content { bottom: calc(120px + env(safe-area-inset-bottom)); }
+.island-panel--top { max-height: calc(100% - 254px - env(safe-area-inset-bottom)); }
+.island-panel--fill { height: calc(100% - 254px - env(safe-area-inset-bottom)); }
 @media (max-width: 360px) {
   .bottom-controls .recommend-button { flex-basis: 184px; }
 }
@@ -1200,3 +1200,18 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
 /* Match the original shared top edge: the solid brand pill stays in place
    while the same-colored panel meets it. Never crossfade its surface. */
 .top-bar { align-items: flex-start; }
+
+/* Reference-sized controls: match their proportions within the phone screen. */
+.brand-pill { min-width: 138px; min-height: 50px; padding: 9px 17px 9px 12px; gap: 9px; }
+.brand-icon { width: 30px; height: 30px; }
+.brand-label { font-size: 18px; }
+.icon-button, .island-close { width: 46px; height: 46px; }
+.icon-button svg, .island-close svg { width: 24px; height: 24px; }
+.island-head { height: 50px; }
+.profile-header { align-items: center; }
+.profile-content { top: 114px; }
+.bottom-controls .locate-button { width: 46px; height: 46px; border-radius: 15px; }
+.locate-button svg { width: 26px; height: 26px; }
+.bottom-nav { height: 86px; border-radius: 30px; }
+.bottom-nav button { gap: 6px; font-size: 13px; }
+.bottom-nav svg { width: 30px; height: 30px; }
