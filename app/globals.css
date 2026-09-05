@@ -1186,14 +1186,15 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
   right: 16px;
   justify-content: center;
 }
-.bottom-controls .recommend-button { flex: 0 1 190px; }
+.bottom-controls .recommend-button { flex: 0 1 212px; max-width: calc(100% - 104px); height: 56px; font-size: 18px; }
+.bottom-controls .recommend-label svg { width: 22px; height: 22px; }
 .bottom-controls .locate-button { position: absolute; right: 0; }
 .course-sheet, .generating-pill { bottom: calc(164px + env(safe-area-inset-bottom)); }
 .profile-content { bottom: calc(94px + env(safe-area-inset-bottom)); }
 .island-panel--top { max-height: calc(100% - 215px - env(safe-area-inset-bottom)); }
 .island-panel--fill { height: calc(100% - 215px - env(safe-area-inset-bottom)); }
 @media (max-width: 360px) {
-  .bottom-controls .recommend-button { flex-basis: 170px; }
+  .bottom-controls .recommend-button { flex-basis: 184px; }
 }
 
 /* Match the original shared top edge: the solid brand pill stays in place
