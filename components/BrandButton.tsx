@@ -5,7 +5,7 @@ import { softSpring } from "@/lib/motion";
 
 /**
  * 좌상단 '오늘의길' 버튼. 어떤 팝업/화면에서도 유지되며,
- * 클릭하면 처음 화면으로 돌아간다. 검정 팝업 위에서도 검정 배경/흰 글씨를 그대로 유지한다.
+ * 클릭하면 처음 화면으로 돌아간다. 밝은 표면과 잎 로고를 사용한다.
  */
 export default function BrandButton({ onClick }: { onClick: () => void }) {
   return (
@@ -19,7 +19,7 @@ export default function BrandButton({ onClick }: { onClick: () => void }) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/assets/icon.png"
+        src="/assets/leaf-logo.png"
         alt=""
         className="brand-icon"
         draggable={false}

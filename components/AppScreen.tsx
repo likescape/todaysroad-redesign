@@ -11,7 +11,9 @@ import BrandButton from "./BrandButton";
 import TopActions from "./TopActions";
 import IslandPanel from "./IslandPanel";
 import NotificationsPanel from "./NotificationsPanel";
-import SettingsPanel from "./SettingsPanel";
+import ProfileScreen from "./ProfileScreen";
+import SettingsScreen from "./SettingsScreen";
+import BottomNav, { type Tab } from "./BottomNav";
 import RecommendPanel from "./RecommendPanel";
 import CourseSheet from "./CourseSheet";
 import BottomControls from "./BottomControls";
@@ -20,10 +22,12 @@ import BottomControls from "./BottomControls";
 const ROUTE_DRAW_MS = 1600;
 
 export default function AppScreen() {
+  const [tab, setTab] = useState<Tab>("home");
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const mapRef = useRef<KakaoMapHandle>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [panel, setPanel] = useState<Panel>(null);
-  const [mapStyle, setMapStyle] = useState<MapStyle>("light");
+  const [mapStyle] = useState<MapStyle>("light");
   // 지도에 그려진 생성 코스 경로와 '만드는 중' 연출 상태
   const [route, setRoute] = useState<Course["path"] | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -48,6 +52,7 @@ export default function AppScreen() {
 
   const openPanel = useCallback((next: Exclude<Panel, null>) => {
     setSelectedCourse(null);
+    if (next === "settings") { setSettingsOpen(true); return; }
     setPanel(next);
   }, []);
 
@@ -55,6 +60,8 @@ export default function AppScreen() {
 
   // '오늘의길' 버튼: 어떤 상태에서든 처음 화면으로
   const goHome = useCallback(() => {
+    setTab("home");
+    setSettingsOpen(false);
     pendingPrefsRef.current = null;
     if (generateTimerRef.current) clearTimeout(generateTimerRef.current);
     setGenerating(false);
@@ -91,13 +98,13 @@ export default function AppScreen() {
   }, []);
 
   useEffect(() => {
-    if (!panel) return;
+    if (!panel && !settingsOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPanel(null);
+      if (e.key === "Escape") { setPanel(null); setSettingsOpen(false); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [panel]);
+  }, [panel, settingsOpen]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -110,6 +117,8 @@ export default function AppScreen() {
           route={route}
           routeDrawMs={ROUTE_DRAW_MS}
         />
+        {tab === "my" && <ProfileScreen onHome={goHome} onSettings={() => setSettingsOpen(true)} />}
+        {tab === "community" && <section className="page-surface community-placeholder"><h1>커뮤니티</h1><p>함께 나눌 산책 이야기를 준비하고 있어요.</p></section>}
         <StatusBar />
 
         <AnimatePresence>
@@ -126,10 +135,10 @@ export default function AppScreen() {
           )}
         </AnimatePresence>
 
-        <header className="top-bar">
+        {!settingsOpen && tab !== "my" && <header className="top-bar">
           <BrandButton onClick={goHome} />
-          <TopActions panel={panel} onOpen={openPanel} />
-        </header>
+          {tab === "home" && <TopActions panel={panel} onOpen={openPanel} />}
+        </header>}
 
         <AnimatePresence onExitComplete={handlePanelExitComplete}>
           {panel === "notifications" && (
@@ -141,17 +150,6 @@ export default function AppScreen() {
               onClose={closePanel}
             >
               <NotificationsPanel />
-            </IslandPanel>
-          )}
-          {panel === "settings" && (
-            <IslandPanel
-              key="settings"
-              layoutId="island-settings"
-              anchor="top"
-              title="설정"
-              onClose={closePanel}
-            >
-              <SettingsPanel mapStyle={mapStyle} onMapStyleChange={setMapStyle} />
             </IslandPanel>
           )}
           {panel === "recommend" && (
@@ -210,7 +208,7 @@ export default function AppScreen() {
         </AnimatePresence>
 
         <AnimatePresence>
-          {selectedCourse && !panel && (
+          {selectedCourse && !panel && tab === "home" && !settingsOpen && (
             <CourseSheet
               key={selectedCourse.id}
               course={selectedCourse}
@@ -219,11 +217,13 @@ export default function AppScreen() {
           )}
         </AnimatePresence>
 
-        <BottomControls
+        {tab === "home" && !settingsOpen && <BottomControls
           panel={panel}
           onOpenRecommend={() => openPanel("recommend")}
           onLocate={handleLocate}
-        />
+        />}
+        {!settingsOpen && <BottomNav tab={tab} onChange={(next) => { goHome(); setTab(next); }} />}
+        {settingsOpen && <SettingsScreen onBack={() => setSettingsOpen(false)} />}
       </div>
     </MotionConfig>
   );

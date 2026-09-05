@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "오늘의길",
   description: "오늘 걷기 좋은 길을 추천해주는 산책 코스 앱",
-  icons: { icon: "/assets/icon.png" },
+  icons: { icon: "/assets/leaf-logo.png" },
 };
 
 export const viewport: Viewport = {
