@@ -7,7 +7,7 @@ import { softSpring, staggerItem } from "@/lib/motion";
 import type { RecommendPrefs } from "@/lib/types";
 import { MOOD_TAGS as TAGS } from "@/lib/recommend";
 
-const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 120];
+const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 90];
 
 
 export default function RecommendPanel({

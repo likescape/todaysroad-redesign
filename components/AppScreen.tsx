@@ -134,7 +134,7 @@ export default function AppScreen() {
           )}
         </AnimatePresence>
 
-        {!settingsOpen && tab !== "my" && <header className="top-bar">
+        {!settingsOpen && tab !== "my" && !panel && <header className="top-bar">
           <BrandButton onClick={goHome} />
           {tab === "home" ? <TopActions
             hidden={panel !== null}
@@ -151,6 +151,7 @@ export default function AppScreen() {
               anchor="top"
               fill
               title="코스 추천"
+              onHome={goHome}
               onClose={closePanel}
             >
               <RecommendPanel onSubmit={handleRecommendSubmit} />

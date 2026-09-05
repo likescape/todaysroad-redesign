@@ -84,7 +84,7 @@ export function generateCourse(origin: LatLng, prefs: RecommendPrefs): Course {
   const km = (prefs.minutes / 60) * WALK_KMH;
   const difficulty = prefs.tags.includes("hill")
     ? "어려움"
-    : prefs.minutes >= 120
+    : prefs.minutes >= 90
       ? "보통"
       : "쉬움";
   const path = generateRoute(origin, prefs);

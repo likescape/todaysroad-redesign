@@ -1222,3 +1222,17 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
 @media (max-width: 360px) {
   .bottom-controls .recommend-button { flex-basis: 170px; }
 }
+
+/* Integrate the brand into the recommendation surface, without a floating pill. */
+.island-head--branded {
+  justify-content: space-between;
+  height: 44px;
+  margin: 10px 0 0;
+}
+.island-head--branded .brand-pill {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+.island-head--branded .island-close { background: transparent; }
