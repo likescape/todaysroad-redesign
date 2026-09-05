@@ -15,15 +15,10 @@ export default function BrandButton({ onClick, integrated = false }: { onClick: 
       aria-label="처음 화면으로 돌아가기"
       onClick={onClick}
       whileTap={{ scale: 0.94 }}
-      transition={softSpring}
+      initial={false}
+      animate={{ boxShadow: integrated ? "0 4px 12px #243c2400" : "0 4px 12px #243c2418" }}
+      transition={{ ...softSpring, boxShadow: { duration: 0.24 } }}
     >
-      <motion.span
-        aria-hidden="true"
-        className="brand-surface"
-        initial={false}
-        animate={{ opacity: integrated ? 0 : 1 }}
-        transition={{ duration: 0.24, delay: integrated ? 0.24 : 0 }}
-      />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/assets/leaf-logo.png"

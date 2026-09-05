@@ -1223,15 +1223,6 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
   .bottom-controls .recommend-button { flex-basis: 170px; }
 }
 
-/* Keep the original brand button mounted above the expanding panel.
-   Only its floating surface fades; the logo never leaves or reappears. */
-.brand-pill { background: transparent; box-shadow: none; isolation: isolate; }
-.brand-surface {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: #fff;
-  box-shadow: var(--shadow-float);
-  pointer-events: none;
-}
+/* Match the original shared top edge: the solid brand pill stays in place
+   while the same-colored panel meets it. Never crossfade its surface. */
+.top-bar { align-items: flex-start; }
