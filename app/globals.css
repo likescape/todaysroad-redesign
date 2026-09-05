@@ -116,9 +116,14 @@ button {
 .map-root {
   width: 100%;
   height: 100%;
-  /* 기본 지도는 카카오맵 원본 색상을 그대로 표시한다. */
+  /* 부모에는 필터를 걸지 않아 마커와 경로 색상을 보존한다. */
   filter: none;
   transition: filter 0.45s ease;
+}
+
+/* SDK가 추가하는 지도 타일에만 적용: 이동·확대 시 새 타일에도 유지된다. */
+.app[data-map-style="light"] .map-root img[src*="/api/v1/tile/"] {
+  filter: saturate(0.78);
 }
 
 .app[data-map-style="mono"] .map-root {
