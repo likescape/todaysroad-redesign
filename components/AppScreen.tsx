@@ -135,6 +135,7 @@ export default function AppScreen() {
 
         {!settingsOpen && tab !== "my" && <header className="top-bar">
           <BrandButton onClick={goHome} integrated={panel !== null} />
+          {tab === "home" && !panel && <button className="icon-button" aria-label="설정" onClick={() => setSettingsOpen(true)}><UiIcon name="gear" /></button>}
           {tab === "community" && <button className="icon-button" aria-label="홈으로 돌아가기" onClick={goHome}><UiIcon name="back" /></button>}
         </header>}
 
