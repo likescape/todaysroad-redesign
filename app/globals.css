@@ -1179,39 +1179,19 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
   .settings-row { padding: 9px 0; min-height: 50px; }
 }
 
-/* Top-navigation experiment: reserve the bottom only for walking actions. */
-.top-destinations {
-  display: flex;
-  gap: 7px;
-}
-.destination-button {
-  min-width: 53px;
-  height: 48px;
-  padding: 6px 9px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  border-radius: 17px;
-  background: var(--surface);
-  color: var(--ink-soft);
-  box-shadow: var(--shadow-float);
-}
-.destination-button svg { width: 20px; height: 20px; }
-.destination-button span { font-size: 10px; font-weight: 600; white-space: nowrap; }
+/* Bottom navigation: walking actions sit above the restored tabs. */
 .bottom-controls {
-  bottom: calc(28px + env(safe-area-inset-bottom));
+  bottom: calc(98px + env(safe-area-inset-bottom));
   left: 16px;
   right: 16px;
   justify-content: center;
 }
 .bottom-controls .recommend-button { flex: 0 1 190px; }
 .bottom-controls .locate-button { position: absolute; right: 0; }
-.course-sheet, .generating-pill { bottom: calc(94px + env(safe-area-inset-bottom)); }
-.profile-content { bottom: calc(20px + env(safe-area-inset-bottom)); }
-.island-panel--top { max-height: calc(100% - 145px - env(safe-area-inset-bottom)); }
-.island-panel--fill { height: calc(100% - 145px - env(safe-area-inset-bottom)); }
+.course-sheet, .generating-pill { bottom: calc(164px + env(safe-area-inset-bottom)); }
+.profile-content { bottom: calc(94px + env(safe-area-inset-bottom)); }
+.island-panel--top { max-height: calc(100% - 215px - env(safe-area-inset-bottom)); }
+.island-panel--fill { height: calc(100% - 215px - env(safe-area-inset-bottom)); }
 @media (max-width: 360px) {
   .bottom-controls .recommend-button { flex-basis: 170px; }
 }

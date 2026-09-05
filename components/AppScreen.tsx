@@ -8,12 +8,11 @@ import { generateCourse } from "@/lib/recommend";
 import KakaoMap, { type KakaoMapHandle } from "./KakaoMap";
 import StatusBar from "./StatusBar";
 import BrandButton from "./BrandButton";
-import TopActions from "./TopActions";
+import BottomNav, { type Tab } from "./BottomNav";
 import IslandPanel from "./IslandPanel";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
 import UiIcon from "./UiIcon";
-type Tab = "home" | "community" | "my";
 import RecommendPanel from "./RecommendPanel";
 import CourseSheet from "./CourseSheet";
 import BottomControls from "./BottomControls";
@@ -136,11 +135,7 @@ export default function AppScreen() {
 
         {!settingsOpen && tab !== "my" && <header className="top-bar">
           <BrandButton onClick={goHome} integrated={panel !== null} />
-          {tab === "home" ? <TopActions
-            hidden={panel !== null}
-            onCommunity={() => { goHome(); setTab("community"); }}
-            onMyWalk={() => { goHome(); setTab("my"); }}
-          /> : <button className="icon-button" aria-label="홈으로 돌아가기" onClick={goHome}><UiIcon name="back" /></button>}
+          {tab === "community" && <button className="icon-button" aria-label="홈으로 돌아가기" onClick={goHome}><UiIcon name="back" /></button>}
         </header>}
 
         <AnimatePresence onExitComplete={handlePanelExitComplete}>
@@ -214,6 +209,7 @@ export default function AppScreen() {
           onOpenRecommend={() => openPanel("recommend")}
           onLocate={handleLocate}
         />}
+        {!settingsOpen && <BottomNav tab={tab} onChange={(next) => { goHome(); setTab(next); }} />}
         {settingsOpen && <SettingsScreen onBack={() => setSettingsOpen(false)} />}
       </div>
     </MotionConfig>
