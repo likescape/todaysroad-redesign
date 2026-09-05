@@ -10,10 +10,10 @@ import StatusBar from "./StatusBar";
 import BrandButton from "./BrandButton";
 import TopActions from "./TopActions";
 import IslandPanel from "./IslandPanel";
-import NotificationsPanel from "./NotificationsPanel";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
-import BottomNav, { type Tab } from "./BottomNav";
+import UiIcon from "./UiIcon";
+type Tab = "home" | "community" | "my";
 import RecommendPanel from "./RecommendPanel";
 import CourseSheet from "./CourseSheet";
 import BottomControls from "./BottomControls";
@@ -52,7 +52,6 @@ export default function AppScreen() {
 
   const openPanel = useCallback((next: Exclude<Panel, null>) => {
     setSelectedCourse(null);
-    if (next === "settings") { setSettingsOpen(true); return; }
     setPanel(next);
   }, []);
 
@@ -137,21 +136,14 @@ export default function AppScreen() {
 
         {!settingsOpen && tab !== "my" && <header className="top-bar">
           <BrandButton onClick={goHome} />
-          {tab === "home" && <TopActions panel={panel} onOpen={openPanel} />}
+          {tab === "home" ? <TopActions
+            hidden={panel !== null}
+            onCommunity={() => { goHome(); setTab("community"); }}
+            onMyWalk={() => { goHome(); setTab("my"); }}
+          /> : <button className="icon-button" aria-label="홈으로 돌아가기" onClick={goHome}><UiIcon name="back" /></button>}
         </header>}
 
         <AnimatePresence onExitComplete={handlePanelExitComplete}>
-          {panel === "notifications" && (
-            <IslandPanel
-              key="notifications"
-              layoutId="island-notifications"
-              anchor="top"
-              title="알림"
-              onClose={closePanel}
-            >
-              <NotificationsPanel />
-            </IslandPanel>
-          )}
           {panel === "recommend" && (
             <IslandPanel
               key="recommend"
@@ -222,7 +214,6 @@ export default function AppScreen() {
           onOpenRecommend={() => openPanel("recommend")}
           onLocate={handleLocate}
         />}
-        {!settingsOpen && <BottomNav tab={tab} onChange={(next) => { goHome(); setTab(next); }} />}
         {settingsOpen && <SettingsScreen onBack={() => setSettingsOpen(false)} />}
       </div>
     </MotionConfig>
