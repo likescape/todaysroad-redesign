@@ -12,11 +12,13 @@ const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 90];
 
 export default function RecommendPanel({
   onSubmit,
+  initialPrefs,
 }: {
   onSubmit: (prefs: RecommendPrefs) => void;
+  initialPrefs?: RecommendPrefs | null;
 }) {
-  const [minutes, setMinutes] = useState<RecommendPrefs["minutes"]>(30);
-  const [tags, setTags] = useState<string[]>([]);
+  const [minutes, setMinutes] = useState<RecommendPrefs["minutes"]>(initialPrefs?.minutes ?? 30);
+  const [tags, setTags] = useState<string[]>(initialPrefs?.tags ?? []);
 
   const toggleTag = (id: string) =>
     setTags((prev) =>
@@ -69,8 +71,6 @@ export default function RecommendPanel({
                   initial={false}
                   animate={{
                     scale: active ? 1.04 : 1,
-                    backgroundColor: active ? "#e4f3e5" : "#f3f5f2",
-                    color: active ? "#287b30" : "#555e55",
                   }}
                   whileTap={{ scale: 0.92 }}
                   transition={softSpring}
@@ -84,6 +84,7 @@ export default function RecommendPanel({
         </div>
       </motion.div>
 
+      <p className="rp-image-note">현재 위치의 지도에서 길과 장소를 찾아 연결해요. 지도 이미지는 코스 생성을 위해 OpenAI로 전송돼요.</p>
       <motion.div className="rp-footer" {...staggerItem(3)}>
         <span className="rp-summary">{summary}</span>
         <motion.button

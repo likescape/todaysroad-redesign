@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/DavidHDev/react-bits",
+  "commit": "4bb4491b3879b115eb6758fae7f5b6c3ec7eb0a3",
+  "files": {
+    "GlassSurface.css": "src/ts-default/Components/GlassSurface/GlassSurface.css",
+    "LICENSE.md": "LICENSE.md",
+    "GlassSurface.tsx.txt": "src/ts-default/Components/GlassSurface/GlassSurface.tsx"
+  },
+  "note": "Original source retained for attribution; preview.js adapts the background-only SVG displacement to this standalone preview."
+}

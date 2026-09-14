@@ -1,0 +1,93 @@
+{
+  "results": [
+    {
+      "name": "mobile-light",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish",
+        "tabs-settings-theme",
+        "record-community-private-post"
+      ]
+    },
+    {
+      "name": "mobile-dark",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish"
+      ]
+    },
+    {
+      "name": "desktop-light",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish"
+      ]
+    },
+    {
+      "name": "desktop-dark",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish",
+        "tabs-settings-theme",
+        "record-community-private-post"
+      ]
+    },
+    {
+      "name": "scaled-desktop",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish"
+      ]
+    },
+    {
+      "name": "small-mobile",
+      "passed": [
+        "real-map-markers",
+        "controls",
+        "detail-source-focus",
+        "same-list-before-and-during-walk",
+        "timer",
+        "finish"
+      ]
+    },
+    {
+      "name": "generated-and-existing-courses",
+      "passed": [
+        "generate-from-simulated-gps",
+        "generated-list-retained-on-start",
+        "detail-home-reset",
+        "select-existing-course"
+      ]
+    },
+    {
+      "name": "data-and-sdk-limits",
+      "passed": [
+        "unlocated-catalog",
+        "zero-spots",
+        "SDK-failure-course-walk-finish",
+        "SDK-failure-story-list-detail"
+      ]
+    }
+  ],
+  "errors": []
+}

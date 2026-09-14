@@ -1,0 +1,164 @@
+<div id="image-route-flow" lang="ko">
+  <style>
+    #image-route-flow { color: var(--foreground); }
+    #image-route-flow .ir-header { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+    #image-route-flow .ir-header h2 { margin:0; }
+    #image-route-flow .ir-step-controls { display:flex; flex-wrap:wrap; gap:6px; }
+    #image-route-flow .ir-current { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:baseline; margin:18px 0 6px; }
+    #image-route-flow .ir-current strong { font-weight:500; }
+    #image-route-flow .ir-canvas { width:100%; }
+    #image-route-flow .ir-canvas svg { display:block; width:100%; }
+    #image-route-flow .ir-legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin:8px 0 18px; }
+    #image-route-flow .ir-legend span { display:inline-flex; align-items:center; gap:6px; }
+    #image-route-flow .ir-swatch { display:inline-block; width:10px; height:10px; border-radius:2px; }
+    #image-route-flow .ir-road { background:var(--viz-series-1); }
+    #image-route-flow .ir-nature { background:var(--viz-series-2); }
+    #image-route-flow .ir-water { background:var(--viz-series-3); }
+    #image-route-flow .ir-building { background:var(--viz-series-4); }
+    #image-route-flow .ir-icon { background:var(--viz-series-5); }
+    #image-route-flow .ir-results { margin-top:12px; }
+    #image-route-flow .ir-results summary { cursor:pointer; padding:10px 0; }
+    #image-route-flow .ir-results code { overflow-wrap:anywhere; }
+    #image-route-flow .ir-results .table { width:100%; }
+    #image-route-flow .ir-results th { font-weight:500; }
+  </style>
+  <div class="ir-header">
+    <h2>이미지에서 산책 코스까지</h2>
+    <span class="text-small text-muted">오늘의길 · 7단계</span>
+  </div>
+  <div class="ir-step-controls" role="group" aria-label="산책 코스 생성 단계">
+    <button type="button" class="btn" data-step="1" aria-pressed="true">1 지도 캡처</button>
+    <button type="button" class="btn" data-step="2" aria-pressed="false">2 요소 구분</button>
+    <button type="button" class="btn" data-step="3" aria-pressed="false">3 전략 구성</button>
+    <button type="button" class="btn" data-step="4" aria-pressed="false">4 필터링</button>
+    <button type="button" class="btn" data-step="5" aria-pressed="false">5 경유지 선정</button>
+    <button type="button" class="btn" data-step="6" aria-pressed="false">6 길 연결</button>
+    <button type="button" class="btn" data-step="7" aria-pressed="false">7 코스 완성</button>
+  </div>
+  <div class="ir-current" aria-live="polite">
+    <strong id="ir-step-title">1 / 7 · 현재 위치 주변 지도 캡처</strong>
+    <span id="ir-step-detail" class="text-small">현재 위치를 중심으로 1024×1024 지도 이미지를 준비</span>
+  </div>
+  <div class="ir-canvas" id="ir-canvas"></div>
+  <div class="ir-legend text-small" aria-label="지도 요소 범례">
+    <span><i class="ir-swatch ir-road" aria-hidden="true"></i>길</span>
+    <span><i class="ir-swatch ir-nature" aria-hidden="true"></i>자연</span>
+    <span><i class="ir-swatch ir-water" aria-hidden="true"></i>물</span>
+    <span><i class="ir-swatch ir-building" aria-hidden="true"></i>건물</span>
+    <span><i class="ir-swatch ir-icon" aria-hidden="true"></i>아이콘</span>
+  </div>
+  <span class="text-small text-muted">설명용 가상 도식 · 실제 지도 분석 결과 아님</span>
+  <details class="ir-results" open>
+    <summary>구현·검증 상태</summary>
+    <table class="table table-sm">
+      <thead><tr><th scope="col">항목</th><th scope="col">현재 상태</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">코스 생성</th><td>이미지 기반 7단계 연결 완료 · 취소·재시도 지원</td></tr>
+        <tr><th scope="row">실제 지도 캡처</th><td>서울·부산·제주 확인</td></tr>
+        <tr><th scope="row">테스트·빌드</th><td>41개 테스트 통과 · 빌드 통과</td></tr>
+        <tr><th scope="row">실제 모델 인식</th><td>미검증 · <code>OPENAI_API_KEY</code> 설정 필요</td></tr>
+        <tr><th scope="row">구현 범위</th><td>범용 비전 모델의 벡터 추출 프로토타입</td></tr>
+        <tr><th scope="row">전국 보행 정확도</th><td>미검증 · 현장 출입·횡단·경사 확인 필요</td></tr>
+      </tbody>
+    </table>
+  </details>
+  <script>
+    (() => {
+      const root = document.getElementById('image-route-flow');
+      const canvas = root.querySelector('#ir-canvas');
+      const title = root.querySelector('#ir-step-title');
+      const detail = root.querySelector('#ir-step-detail');
+      const buttons = Array.from(root.querySelectorAll('[data-step]'));
+      const descriptions = [
+        ['현재 위치 주변 지도 캡처', '현재 위치를 중심으로 1024×1024 지도 이미지를 준비'],
+        ['길·자연·건물·아이콘 구분', '길은 선과 교차점으로, 자연·건물은 영역으로, 아이콘은 점으로 구분'],
+        ['산책 전략 구성', '건물·물 통과와 불확실한 길을 제외하고 목표 거리를 설정'],
+        ['선택 카테고리로 필터링', '예시 선택: 자연 + 카페 → 공원과 카페 단서 선택'],
+        ['웨이포인트 선정', '장소 내부가 아닌, 연결 가능한 주변 길에 경유지 배치'],
+        ['인식된 길을 따라 연결', '명확하게 이어진 길로 출발 → 경유지 → 복귀 연결'],
+        ['산책 코스 완성', '완성된 경로로 거리·시간 계산, 경유지와 미반영 조건 표시']
+      ];
+      let step = 1;
+      const ns = 'http://www.w3.org/2000/svg';
+      const create = (tag, attrs, text) => {
+        const node = document.createElementNS(ns, tag);
+        Object.entries(attrs || {}).forEach(([key,value]) => node.setAttribute(key,String(value)));
+        if (text !== undefined) node.textContent = text;
+        return node;
+      };
+      function draw() {
+        const width = Math.max(280, Math.round(canvas.getBoundingClientRect().width));
+        const height = width < 440 ? 305 : 340;
+        const svg = create('svg', {viewBox:`0 0 ${width} ${height}`,width,height,role:'img','aria-label':`${step}단계 ${descriptions[step-1][0]}의 가상 도식`});
+        svg.append(create('desc',{},'사각형 건물, 공원 영역, 물 영역과 도로 연결을 이용한 설명용 도식입니다. 실제 지명이나 실제 지도 좌표를 사용하지 않습니다.'));
+        const p = (x,y) => ({x:20+x*(width-40),y:38+y*(height-75)});
+        const road = [p(.1,.82),p(.1,.22),p(.43,.22),p(.76,.22),p(.9,.47),p(.76,.82),p(.43,.82),p(.1,.82)];
+        const parkWay = road[2], cafeWay = road[4], start = road[0];
+        const toPoints = values => values.map(v=>`${v.x},${v.y}`).join(' ');
+        const roadColor = step > 1 ? 'var(--viz-series-1)' : 'var(--border)';
+        const label = (value,x,y,anchor='middle') => svg.append(create('text',{x,y,'text-anchor':anchor,fill:'var(--foreground)'},value));
+        const polygon = (points,fill,opacity) => svg.append(create('polygon',{points:toPoints(points),fill,'fill-opacity':opacity}));
+        const line = (points,color,strokeWidth,dash) => svg.append(create('polyline',{points:toPoints(points),fill:'none',stroke:color,'stroke-width':strokeWidth,'stroke-linejoin':'round','stroke-linecap':'round',...(dash?{'stroke-dasharray':dash}:{})}));
+        // These shapes illustrate segmented regions; they do not depict geographic outlines.
+        polygon([p(.28,.31),p(.58,.31),p(.58,.62),p(.28,.62)], 'var(--viz-series-2)',step>=2?.28:.10);
+        polygon([p(.87,.62),p(.98,.67),p(.98,.98),p(.83,.98),p(.83,.84),p(.85,.73)],'var(--viz-series-3)',step>=2&&step<4 ? .28 : .10);
+        const buildingOpacity = step>=4 ? .10 : step>=2 ? .28 : .10;
+        polygon([p(.13,.02),p(.30,.02),p(.30,.15),p(.13,.15)],'var(--viz-series-4)',buildingOpacity);
+        polygon([p(.63,.32),p(.76,.32),p(.76,.52),p(.63,.52)],'var(--viz-series-4)',buildingOpacity);
+        polygon([p(.19,.66),p(.32,.66),p(.32,.76),p(.19,.76)],'var(--viz-series-4)',buildingOpacity);
+        line(road,roadColor,step>=2?3:6);
+        line([p(.1,.82),p(.04,.98)],roadColor,step>=2?3:6);
+        line([p(.76,.22),p(.89,.06)],roadColor,step>=2?3:6);
+        const parkCenter=p(.43,.48), waterCenter=p(.88,.98), buildingCenter=p(.70,.42);
+        label('공원',parkCenter.x,parkCenter.y);
+        label('물',waterCenter.x,waterCenter.y-2);
+        if(width>=440 || step<4) label('건물',buildingCenter.x,buildingCenter.y+4);
+        const cafe=p(.83,.38), shop=p(.20,.08);
+        for (const [point,name,selected] of [[cafe,'카페',true],[shop,'상점',false]]) {
+          const g=create('g',{opacity:step>=4&&!selected ? .3 : 1});
+          g.append(create('circle',{cx:point.x,cy:point.y,r:5,fill:step>=2?'var(--viz-series-5)':'var(--muted-foreground)'}));
+          svg.append(g);
+          if(name==='카페') label(name,p(.96,.30).x,p(.96,.30).y,'end');
+          else if(step<4) label(name,point.x,point.y-11);
+        }
+        if(step>=2) {
+          road.slice(0,-1).forEach(point=>svg.append(create('circle',{cx:point.x,cy:point.y,r:4,fill:'var(--background)',stroke:roadColor,'stroke-width':2})));
+        }
+        if(step===3) {
+          const a=p(.43,.82),b=p(.95,.90),mid=p(.71,.86);
+          line([a,b],'var(--destructive)',2,'5 5');
+          line([{x:mid.x-5,y:mid.y-5},{x:mid.x+5,y:mid.y+5}],'var(--destructive)',2);
+          line([{x:mid.x+5,y:mid.y-5},{x:mid.x-5,y:mid.y+5}],'var(--destructive)',2);
+          label('통과 제외',p(.53,.94).x,p(.53,.94).y);
+        }
+        if(step>=4) {
+          svg.append(create('rect',{x:parkCenter.x-28,y:parkCenter.y-20,width:56,height:32,rx:4,fill:'none',stroke:'var(--viz-series-2)','stroke-width':2}));
+          svg.append(create('circle',{cx:cafe.x,cy:cafe.y,r:11,fill:'none',stroke:'var(--viz-series-5)','stroke-width':2}));
+        }
+        if(step>=6) {
+          line(road,'var(--background)',9);
+          line(road,'var(--viz-series-1)',5);
+          const arrow=p(.26,.22);
+          polygon([{x:arrow.x-5,y:arrow.y-5},{x:arrow.x+4,y:arrow.y},{x:arrow.x-5,y:arrow.y+5}],'var(--foreground)',1);
+        }
+        if(step>=5) {
+          [parkWay,cafeWay].forEach((point,index)=>{
+            svg.append(create('circle',{cx:point.x,cy:point.y,r:12,fill:'var(--primary)',stroke:'var(--background)','stroke-width':2}));
+            svg.append(create('text',{x:point.x,y:point.y+4,'text-anchor':'middle',fill:'var(--primary-foreground)'},String(index+1)));
+          });
+        }
+        svg.append(create('circle',{cx:start.x,cy:start.y,r:7,fill:'var(--foreground)',stroke:'var(--background)','stroke-width':3}));
+        label(step===7?'출발·도착':'현재 위치',start.x, start.y+24);
+        const topLabel=step===1?'캡처 영역':step===2?'이미지 요소 분리':step===3?'물·건물 통과 제외':step===4?'자연 + 카페':step===5?'1 공원 주변 길 · 2 카페 주변 길':step===6?'인식한 길의 연결 관계':'출발 → 공원 → 카페 → 복귀';
+        label(topLabel,20,18,'start');
+        canvas.replaceChildren(svg);
+        title.textContent = `${step} / 7 · ${descriptions[step-1][0]}`;
+        detail.textContent = descriptions[step-1][1];
+        buttons.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.step)===step)));
+      }
+      buttons.forEach(button=>button.addEventListener('click',()=>{step=Number(button.dataset.step);draw();}));
+      new ResizeObserver(draw).observe(canvas);
+      draw();
+    })();
+  </script>
+</div>

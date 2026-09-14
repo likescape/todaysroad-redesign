@@ -1,3 +1,7 @@
+import type { CourseSpot } from "./spots";
+import type { MapSegmentation, ImagePoint } from "./map-segmentation";
+import type { ImageWaypoint } from "./image-route-planner";
+
 export interface Course {
   id: string;
   /** 지도 말풍선에 표시되는 코스 이름 */
@@ -16,6 +20,18 @@ export interface Course {
   generated?: boolean;
   /** 지도에 그릴 산책 경로 (생성 코스만) */
   path?: { lat: number; lng: number }[];
+  /** Route-specific discovery snapshot. Older courses may have no spots. */
+  spots?: CourseSpot[];
+  /** Transient image evidence; not persisted into walk records or community posts. */
+  imageAnalysis?: {
+    snapshot: string;
+    capturedAt: string;
+    level: number;
+    segmentation?: MapSegmentation;
+    pixels: ImagePoint[];
+    waypoints: ImageWaypoint[];
+    notes: string[];
+  };
 }
 
 export const COURSES: Course[] = [

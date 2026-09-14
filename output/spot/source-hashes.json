@@ -1,0 +1,20 @@
+{
+  "manifest.json": {
+    "sales-2025.zip": true,
+    "stores-2025.zip": true,
+    "areas-2023.zip": true,
+    "events-api-sample.json": true
+  },
+  "mixed-manifest.json": {
+    "gwangheungdang-official.html": true,
+    "gongmin-seoul-story.html": true,
+    "gyeongui-parks-official.html": true,
+    "events-api-refresh.json": true,
+    "nearby-joined-2025q4.json": true
+  },
+  "building-manifest.json": {
+    "building-gusu-response.json": true,
+    "building-selected-response.txt": true,
+    "building-sheet-post.html": true
+  }
+}
