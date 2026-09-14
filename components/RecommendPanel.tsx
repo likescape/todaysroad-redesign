@@ -7,7 +7,7 @@ import { softSpring, staggerItem } from "@/lib/motion";
 import type { RecommendPrefs } from "@/lib/types";
 import { MOOD_TAGS as TAGS } from "@/lib/recommend";
 
-const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 120];
+const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 90];
 
 
 export default function RecommendPanel({
@@ -69,8 +69,8 @@ export default function RecommendPanel({
                   initial={false}
                   animate={{
                     scale: active ? 1.04 : 1,
-                    backgroundColor: active ? "#ffffff" : "rgba(255,255,255,0.1)",
-                    color: active ? "#101010" : "#ffffff",
+                    backgroundColor: active ? "#e4f3e5" : "#f3f5f2",
+                    color: active ? "#287b30" : "#555e55",
                   }}
                   whileTap={{ scale: 0.92 }}
                   transition={softSpring}
