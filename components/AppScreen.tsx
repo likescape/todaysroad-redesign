@@ -207,10 +207,9 @@ export default function AppScreen() {
 
         {tab === "home" && !settingsOpen && <BottomControls
           panel={panel}
-          onOpenRecommend={() => openPanel("recommend")}
           onLocate={handleLocate}
         />}
-        {!settingsOpen && <BottomNav tab={tab} onChange={(next) => { goHome(); setTab(next); }} />}
+        {!settingsOpen && <BottomNav tab={tab} onChange={(next) => { goHome(); setTab(next); if (next === "home") openPanel("recommend"); }} />}
         {settingsOpen && <SettingsScreen onBack={() => setSettingsOpen(false)} />}
       </div>
     </MotionConfig>

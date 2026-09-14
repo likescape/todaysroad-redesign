@@ -1104,10 +1104,6 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
 .route-turn i, .transit-stop i { border-color: var(--green); }
 .current-marker-dot { width: 23px; height: 23px; background: #4289fa; border: 3px solid white; box-shadow: 0 0 0 6px #4289fa22, 0 2px 8px #4289fa40; }
 .current-marker-dot svg { display: none; }
-.bottom-nav { position: absolute; z-index: 21; bottom: calc(22px + env(safe-area-inset-bottom)); left: 12px; right: 12px; height: 64px; display: flex; align-items: center; background: #ffffffef; border-radius: 25px; box-shadow: var(--shadow-float); backdrop-filter: blur(16px); }
-.bottom-nav button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: 100%; color: #959995; font-size: 11px; font-weight: 600; }
-.bottom-nav svg { width: 23px; height: 23px; }
-.bottom-nav [aria-current="page"] { color: var(--green); }
 .page-surface { position: absolute; inset: 0; background: var(--screen-bg); z-index: 10; }
 .profile-header { position: absolute; top: 50px; left: 16px; right: 16px; display: flex; gap: 16px; align-items: center; }
 .profile-header h1 { font-size: 19px; margin: 0; flex: 1; }
@@ -1212,6 +1208,13 @@ button:focus-visible { outline: 3px solid #318737; outline-offset: 4px; }
 .profile-content { top: 114px; }
 .bottom-controls .locate-button { width: 46px; height: 46px; border-radius: 15px; }
 .locate-button svg { width: 26px; height: 26px; }
-.bottom-nav { height: 86px; border-radius: 30px; }
-.bottom-nav button { gap: 6px; font-size: 13px; }
-.bottom-nav svg { width: 30px; height: 30px; }
+
+/* Floating course action and navigation. */
+.bottom-nav { position: absolute; z-index: 21; bottom: calc(22px + env(safe-area-inset-bottom)); left: 12px; right: 12px; height: 72px; padding: 7px; display: flex; align-items: center; gap: 4px; background: var(--nav-bg, #ffffffef); border: 1px solid var(--border-soft, #edf0e9); border-radius: 999px; box-shadow: 0 4px 18px #17201912; backdrop-filter: blur(16px); }
+.bottom-nav button { flex: 1 1 0; min-width: 0; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 9px; height: 100%; padding: 0 8px; border-radius: 999px; color: var(--ink); font-size: 16px; font-weight: 750; white-space: nowrap; transition: flex-grow 180ms ease, background-color 180ms ease, color 180ms ease; }
+.bottom-nav svg { flex-shrink: 0; width: 29px; height: 29px; }
+.bottom-nav button span { display: none; }
+.bottom-nav [aria-current="page"] { flex-grow: 2.1; color: var(--green); background: var(--surface-soft, #f0f4ee); box-shadow: inset 0 0 0 1px var(--border-soft, #edf0e9), 0 1px 3px #17201908; }
+.bottom-nav [aria-current="page"] span { display: inline; }
+.bottom-nav button:focus-visible { outline: 2px solid var(--green); outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .bottom-nav button { transition: none; } }
