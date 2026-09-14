@@ -1,0 +1,356 @@
+{
+  "checkedOn": "2026-09-09",
+  "provider": "Kakao Maps Web SDK services",
+  "results": [
+    {
+      "query": "서울특별시 마포구 독막로21길 15",
+      "status": "OK",
+      "rows": [
+        {
+          "address": {
+            "address_name": "서울 마포구 창전동 42-1",
+            "b_code": "1144011400",
+            "h_code": "1144065500",
+            "main_address_no": "42",
+            "mountain_yn": "N",
+            "region_1depth_name": "서울",
+            "region_2depth_name": "마포구",
+            "region_3depth_h_name": "서강동",
+            "region_3depth_name": "창전동",
+            "sub_address_no": "1",
+            "x": "126.928706582608",
+            "y": "37.5486522177452"
+          },
+          "address_name": "서울 마포구 독막로21길 15",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "서울 마포구 독막로21길 15",
+            "building_name": "광흥당",
+            "main_building_no": "15",
+            "region_1depth_name": "서울",
+            "region_2depth_name": "마포구",
+            "region_3depth_name": "창전동",
+            "road_name": "독막로21길",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "126.928706582608",
+            "y": "37.5486522177452",
+            "zone_no": "04065"
+          },
+          "x": "126.928706582608",
+          "y": "37.5486522177452"
+        }
+      ]
+    },
+    {
+      "query": "서울특별시 마포구 독막로 176-1",
+      "status": "OK",
+      "rows": [
+        {
+          "address": {
+            "address_name": "서울 마포구 구수동 11",
+            "b_code": "1144011300",
+            "h_code": "1144063000",
+            "main_address_no": "11",
+            "mountain_yn": "N",
+            "region_1depth_name": "서울",
+            "region_2depth_name": "마포구",
+            "region_3depth_h_name": "신수동",
+            "region_3depth_name": "구수동",
+            "sub_address_no": "",
+            "x": "126.933170665514",
+            "y": "37.5472283676166"
+          },
+          "address_name": "서울 마포구 독막로 176-1",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "서울 마포구 독막로 176-1",
+            "building_name": "",
+            "main_building_no": "176",
+            "region_1depth_name": "서울",
+            "region_2depth_name": "마포구",
+            "region_3depth_name": "구수동",
+            "road_name": "독막로",
+            "sub_building_no": "1",
+            "underground_yn": "N",
+            "x": "126.933170665514",
+            "y": "37.5472283676166",
+            "zone_no": "04087"
+          },
+          "x": "126.933170665514",
+          "y": "37.5472283676166"
+        }
+      ]
+    },
+    {
+      "query": "광흥당",
+      "status": "OK",
+      "rows": [
+        {
+          "address_name": "서울 마포구 창전동 42-1",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "교육,학문 > 교육단체 > 체험학습장",
+          "distance": "",
+          "id": "24375879",
+          "phone": "02-322-4450",
+          "place_name": "광흥당",
+          "place_url": "http://place.map.kakao.com/24375879",
+          "road_address_name": "서울 마포구 독막로21길 15",
+          "x": "126.928729893327",
+          "y": "37.5486531328224"
+        },
+        {
+          "address_name": "강원특별자치도 횡성군 횡성읍 읍상리 283-3",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "가정,생활 > 생활용품점 > 열쇠,도장",
+          "distance": "",
+          "id": "1149969332",
+          "phone": "033-343-2760",
+          "place_name": "광흥당",
+          "place_url": "http://place.map.kakao.com/1149969332",
+          "road_address_name": "강원특별자치도 횡성군 횡성읍 삼일로 6",
+          "x": "127.986568846008",
+          "y": "37.4900426696241"
+        }
+      ]
+    },
+    {
+      "query": "공민왕사당",
+      "status": "OK",
+      "rows": [
+        {
+          "address_name": "서울 마포구 창전동 446-5",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "여행 > 관광,명소 > 문화유적 > 사당,제단",
+          "distance": "",
+          "id": "8236081",
+          "phone": "",
+          "place_name": "공민왕사당",
+          "place_url": "http://place.map.kakao.com/8236081",
+          "road_address_name": "",
+          "x": "126.928544343855",
+          "y": "37.5486133767492"
+        }
+      ]
+    },
+    {
+      "query": "경의선숲길 신수동",
+      "status": "OK",
+      "rows": [
+        {
+          "address_name": "서울 마포구 신수동 36-3",
+          "category_group_code": "FD6",
+          "category_group_name": "음식점",
+          "category_name": "음식점 > 한식 > 육류,고기",
+          "distance": "",
+          "id": "1448096292",
+          "phone": "",
+          "place_name": "리정원 경의선숲길 대흥점",
+          "place_url": "http://place.map.kakao.com/1448096292",
+          "road_address_name": "서울 마포구 백범로10길 30",
+          "x": "126.939899505469",
+          "y": "37.548133163054"
+        },
+        {
+          "address_name": "서울 마포구 신수동 93-213",
+          "category_group_code": "CE7",
+          "category_group_name": "카페",
+          "category_name": "음식점 > 카페",
+          "distance": "",
+          "id": "813329591",
+          "phone": "0507-2093-7571",
+          "place_name": "일프레소 경의선숲길점",
+          "place_url": "http://place.map.kakao.com/813329591",
+          "road_address_name": "서울 마포구 광성로 41",
+          "x": "126.9376404567161",
+          "y": "37.54988713669688"
+        },
+        {
+          "address_name": "서울 마포구 대흥동 325-82",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "여행 > 공원",
+          "distance": "",
+          "id": "1524861109",
+          "phone": "",
+          "place_name": "경의선숲길",
+          "place_url": "http://place.map.kakao.com/1524861109",
+          "road_address_name": "",
+          "x": "126.943148698793",
+          "y": "37.5462426746628"
+        },
+        {
+          "address_name": "서울 마포구 대흥동 255-1",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "부동산 > 주거시설 > 빌라,주택",
+          "distance": "",
+          "id": "319321532",
+          "phone": "",
+          "place_name": "프레이야경의선숲길",
+          "place_url": "http://place.map.kakao.com/319321532",
+          "road_address_name": "서울 마포구 대흥로 80-9",
+          "x": "126.94200507005168",
+          "y": "37.54717014734198"
+        },
+        {
+          "address_name": "서울 마포구 염리동 169-12",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "가정,생활 > 화장실",
+          "distance": "",
+          "id": "1130602347",
+          "phone": "",
+          "place_name": "경의선숲길 개방화장실",
+          "place_url": "http://place.map.kakao.com/1130602347",
+          "road_address_name": "",
+          "x": "126.946431172159",
+          "y": "37.5450548906649"
+        },
+        {
+          "address_name": "서울 마포구 동교동 190-1",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "여행 > 공원",
+          "distance": "",
+          "id": "1158487374",
+          "phone": "02-719-8830",
+          "place_name": "경의선숲길",
+          "place_url": "http://place.map.kakao.com/1158487374",
+          "road_address_name": "",
+          "x": "126.925338455597",
+          "y": "37.558803479324"
+        },
+        {
+          "address_name": "서울 마포구 연남동 375",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "여행 > 공원",
+          "distance": "",
+          "id": "27388917",
+          "phone": "",
+          "place_name": "경의선숲길",
+          "place_url": "http://place.map.kakao.com/27388917",
+          "road_address_name": "",
+          "x": "126.923099173686",
+          "y": "37.5616023398319"
+        },
+        {
+          "address_name": "서울 용산구 용문동 5-133",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "여행 > 공원 > 도시근린공원",
+          "distance": "",
+          "id": "27455973",
+          "phone": "",
+          "place_name": "경의선숲길공원",
+          "place_url": "http://place.map.kakao.com/27455973",
+          "road_address_name": "",
+          "x": "126.95930819292113",
+          "y": "37.53939454468178"
+        },
+        {
+          "address_name": "서울 마포구 도화동 1-402",
+          "category_group_code": "",
+          "category_group_name": "",
+          "category_name": "서비스,산업 > 관리,운영 > 공원관리운영",
+          "distance": "",
+          "id": "1612389130",
+          "phone": "02-719-8830",
+          "place_name": "서울특별시서부공원녹지사업소 경의선숲길 커뮤니티센터",
+          "place_url": "http://place.map.kakao.com/1612389130",
+          "road_address_name": "서울 마포구 새창로 37",
+          "x": "126.953729597068",
+          "y": "37.5417855462039"
+        },
+        {
+          "address_name": "서울 마포구 염리동 157-23",
+          "category_group_code": "FD6",
+          "category_group_name": "음식점",
+          "category_name": "음식점 > 아시아음식 > 동남아음식 > 태국음식",
+          "distance": "",
+          "id": "2061602248",
+          "phone": "02-702-0662",
+          "place_name": "리틀방콕 공덕경의선숲길점",
+          "place_url": "http://place.map.kakao.com/2061602248",
+          "road_address_name": "서울 마포구 백범로24길 11-4",
+          "x": "126.94494135556",
+          "y": "37.545955204468"
+        },
+        {
+          "address_name": "서울 마포구 대흥동 485-1",
+          "category_group_code": "CE7",
+          "category_group_name": "카페",
+          "category_name": "음식점 > 카페 > 커피전문점",
+          "distance": "",
+          "id": "321012503",
+          "phone": "02-3275-3429",
+          "place_name": "커피앳웍스 경의선숲길점",
+          "place_url": "http://place.map.kakao.com/321012503",
+          "road_address_name": "서울 마포구 독막로 279",
+          "x": "126.944520712738",
+          "y": "37.5455387460315"
+        },
+        {
+          "address_name": "서울 마포구 창전동 2-85",
+          "category_group_code": "CE7",
+          "category_group_name": "카페",
+          "category_name": "음식점 > 카페 > 테마카페 > 디저트카페",
+          "distance": "",
+          "id": "1637508578",
+          "phone": "070-491-8670",
+          "place_name": "피크니크 홍대 경의선숲길점",
+          "place_url": "http://place.map.kakao.com/1637508578",
+          "road_address_name": "서울 마포구 서강로13길 24",
+          "x": "126.93258739465594",
+          "y": "37.553931643084006"
+        },
+        {
+          "address_name": "서울 마포구 대흥동 241-22",
+          "category_group_code": "FD6",
+          "category_group_name": "음식점",
+          "category_name": "음식점 > 술집",
+          "distance": "",
+          "id": "124220039",
+          "phone": "",
+          "place_name": "마주 경의선숲길본점",
+          "place_url": "http://place.map.kakao.com/124220039",
+          "road_address_name": "서울 마포구 백범로16안길 29",
+          "x": "126.943709908378",
+          "y": "37.5463240334236"
+        },
+        {
+          "address_name": "서울 마포구 염리동 164-1",
+          "category_group_code": "CE7",
+          "category_group_name": "카페",
+          "category_name": "음식점 > 카페 > 커피전문점 > 할리스",
+          "distance": "",
+          "id": "669270382",
+          "phone": "02-701-3967",
+          "place_name": "할리스 공덕경의선숲길점",
+          "place_url": "http://place.map.kakao.com/669270382",
+          "road_address_name": "서울 마포구 백범로28길 22",
+          "x": "126.946497083668",
+          "y": "37.5446629859114"
+        },
+        {
+          "address_name": "서울 마포구 공덕동 476",
+          "category_group_code": "CE7",
+          "category_group_name": "카페",
+          "category_name": "음식점 > 카페 > 커피전문점 > 나이스카페인클럽",
+          "distance": "",
+          "id": "1534454772",
+          "phone": "",
+          "place_name": "나이스카페인클럽 공덕경의선숲길점",
+          "place_url": "http://place.map.kakao.com/1534454772",
+          "road_address_name": "서울 마포구 백범로 152",
+          "x": "126.94689483709038",
+          "y": "37.545451539696124"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="오늘의길 Liquid Glass 메인 화면 디자인 미리보기. 라이트와 다크의 홈, 코스, 산책 화면을 비교합니다.">
+  <title>오늘의길 · Glass 미리보기</title>
+  <link rel="icon" href="assets/leaf-logo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="preview.css">
+  <script src="map-data.js" defer></script>
+  <script src="preview.js" defer></script>
+</head>
+<body>
+  <main id="glass-preview" data-view="compare">
+    <header class="studio-header">
+      <div class="studio-heading">
+        <a class="studio-brand" href="plan.md" aria-label="오늘의길 디자인 계획 열기"><img src="assets/leaf-logo.png" alt="" width="32" height="32"><span>오늘의길</span></a>
+        <span class="studio-divider"></span><h1>Glass 미리보기</h1>
+      </div>
+      <span class="study-label"><span></span> MAIN SCREEN / 01</span>
+    </header>
+
+    <div class="studio-toolbar">
+      <div class="control-group" aria-label="화면 상태">
+        <button type="button" data-scene="home" aria-pressed="false">홈</button>
+        <button type="button" data-scene="course" aria-pressed="true">코스 확인</button>
+        <button type="button" data-scene="walking" aria-pressed="false">산책 중</button>
+      </div>
+      <div class="control-group view-controls" aria-label="테마 보기">
+        <button type="button" data-view="compare" aria-pressed="true">나란히</button>
+        <button type="button" data-view="light" aria-pressed="false"><span data-icon="sun"></span>라이트</button>
+        <button type="button" data-view="dark" aria-pressed="false"><span data-icon="moon"></span>다크</button>
+      </div>
+    </div>
+
+    <section class="preview-grid" aria-label="라이트·다크 메인 화면 비교">
+      <article class="phone-study" data-study="light">
+        <header class="study-caption"><h2><span class="theme-dot light-dot"></span>LIGHT</h2><span>맑고 부드러운 유리</span></header>
+        <div class="phone-shell"><div class="phone" data-theme="light" data-state="course" aria-label="라이트 모드 앱 미리보기"></div></div>
+      </article>
+      <article class="phone-study" data-study="dark">
+        <header class="study-caption"><h2><span class="theme-dot dark-dot"></span>DARK</h2><span>깊고 차분한 유리</span></header>
+        <div class="phone-shell"><div class="phone" data-theme="dark" data-state="course" aria-label="다크 모드 앱 미리보기"></div></div>
+      </article>
+    </section>
+
+    <footer class="studio-footer">
+      <p>기존 배치 위에, 빛과 깊이를 더하다.</p>
+      <span>화면 시안 · 예시 코스 / 지도 © OpenStreetMap contributors</span>
+    </footer>
+    <p class="sr-only" id="preview-announcement" role="status" aria-live="polite"></p>
+  </main>
+  <noscript><p class="noscript">이 미리보기는 JavaScript를 켜면 볼 수 있습니다.</p></noscript>
+</body>
+</html>

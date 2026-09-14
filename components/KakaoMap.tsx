@@ -8,6 +8,12 @@ import {
   useState,
 } from "react";
 import { CURRENT_LOCATION, MAP_CENTER, type Course } from "@/lib/courses";
+import { splitWalkPath } from "@/lib/walk";
+import { useTheme } from "./ThemeProvider";
+import type { ResolvedSpot } from "@/lib/spots";
+import { captureMapSnapshot, locateForSnapshot } from "@/lib/map-snapshot";
+import { ImageRouteError, type MapSnapshot } from "@/lib/map-segmentation";
+import type { ImageWaypoint } from "@/lib/image-route-planner";
 
 export interface KakaoMapHandle {
   moveToCurrentLocation: () => void;
@@ -15,6 +21,7 @@ export interface KakaoMapHandle {
   resetView: () => void;
   /** 현재 위치 마커가 놓인 좌표 */
   getCurrentPosition: () => { lat: number; lng: number };
+  captureAroundCurrentPosition: (minutes: number, signal: AbortSignal) => Promise<MapSnapshot>;
 }
 
 interface KakaoMapProps {
@@ -25,6 +32,12 @@ interface KakaoMapProps {
   route?: { lat: number; lng: number }[] | null;
   /** 경로 그리기 애니메이션 길이(ms) */
   routeDrawMs?: number;
+  /** Simulated progress for the walking UI preview; null means no active walk. */
+  walkProgress?: number | null;
+  spots: ResolvedSpot[];
+  selectedSpotId: string | null;
+  onSelectSpot: (id: string) => void;
+  waypoints?: ImageWaypoint[];
 }
 
 declare global {
@@ -39,7 +52,7 @@ const INITIAL_LEVEL = 4;
 const KAKAO_APP_KEY =
   process.env.NEXT_PUBLIC_KAKAO_MAP_KEY ?? "c27a21ad128ccdc8bc1b3ec50662e18b";
 
-function loadKakaoSdk(): Promise<any> {
+export function loadKakaoSdk(): Promise<any> {
   if (typeof window === "undefined") return Promise.reject();
   if (window.__kakaoSdkPromise) return window.__kakaoSdkPromise;
 
@@ -91,20 +104,26 @@ function createCourseEl(course: Course, onClick: () => void) {
 }
 
 const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
-  { courses, selectedCourseId, onSelectCourse, route = null, routeDrawMs = 1600 },
+  { courses, selectedCourseId, onSelectCourse, route = null, routeDrawMs = 1600, walkProgress = null, spots, selectedSpotId, onSelectSpot, waypoints },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   const mapRef = useRef<any>(null);
   const currentPosRef = useRef(CURRENT_LOCATION);
   const currentOverlayRef = useRef<any>(null);
   const courseElsRef = useRef<Map<string, HTMLElement>>(new Map());
+  const spotElsRef = useRef<Map<string, HTMLElement>>(new Map());
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
-  const routeRef = useRef<{ halo: any; line: any; turn: any } | null>(null);
+  const routeRef = useRef<{ halo: any; line: any; turn: any; completed: any } | null>(null);
+  const walking = walkProgress !== null;
+  const positionBeforeWalkRef = useRef(CURRENT_LOCATION);
 
   const onSelectRef = useRef(onSelectCourse);
   onSelectRef.current = onSelectCourse;
+  const onSpotRef = useRef(onSelectSpot);
+  onSpotRef.current = onSelectSpot;
 
   useEffect(() => {
     let cancelled = false;
@@ -131,7 +150,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
           ),
           content: currentEl,
           yAnchor: 0.5,
-          zIndex: 2,
+          zIndex: 4,
         });
         currentOverlay.setMap(map);
         currentOverlayRef.current = currentOverlay;
@@ -194,6 +213,77 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
     };
   }, [courses]);
 
+  // Keep elements stable while opening a story, changing theme, or ticking the timer.
+  // Stable nodes let the common dialog return keyboard focus to the initiating marker.
+  useEffect(() => {
+    const map = mapRef.current, kakao = window.kakao;
+    if (!ready || !map || !kakao) return;
+    const overlays: any[] = [];
+    spots.forEach(({ story, place, link }) => {
+      if (!place.point || place.location.status !== "verified") return;
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "spot-marker";
+      el.dataset.spotId = story.id;
+      el.setAttribute("aria-label", `경로 주변 이야기 ${link.order}: ${story.title}, ${place.name}`);
+      el.setAttribute("aria-haspopup", "dialog");
+      el.setAttribute("aria-pressed", "false");
+      const icon = document.createElement("span");
+      icon.textContent = "✧";
+      icon.setAttribute("aria-hidden", "true");
+      const number = document.createElement("b");
+      number.textContent = String(link.order);
+      el.append(icon, number);
+      ["mousedown", "touchstart"].forEach(type => el.addEventListener(type, event => { event.stopPropagation(); kakao.maps.event.preventMap(); }));
+      el.addEventListener("click", event => { event.stopPropagation(); kakao.maps.event.preventMap(); onSpotRef.current(story.id); });
+      spotElsRef.current.set(story.id, el);
+      // Nearby places keep distinct hit targets; a stem and dot retain the real anchor.
+      const neighbours = spots.filter(item => item.place.point && Math.hypot(
+        (item.place.point.lat - place.point!.lat) * 111195,
+        (item.place.point.lng - place.point!.lng) * 111195 * Math.cos(place.point!.lat * Math.PI / 180)
+      ) < 60);
+      const shift = (neighbours.findIndex(item => item.story.id === story.id) - (neighbours.length - 1) / 2) * 60;
+      const anchor = document.createElement("div");
+      anchor.className = "spot-map-anchor";
+      el.style.left = `${shift - 25}px`;
+      const stem = document.createElement("i");
+      stem.className = "spot-map-stem";
+      stem.style.height = `${Math.hypot(shift, 12)}px`;
+      stem.style.transform = `rotate(${Math.atan2(shift, 12)}rad)`;
+      const dot = document.createElement("i");
+      dot.className = "spot-map-dot";
+      anchor.append(stem, dot, el);
+      const overlay = new kakao.maps.CustomOverlay({ position: new kakao.maps.LatLng(place.point.lat, place.point.lng), content: anchor, xAnchor: 0, yAnchor: 0, zIndex: 5 });
+      overlay.setMap(map);
+      overlays.push(overlay);
+    });
+    return () => { overlays.forEach(overlay => overlay.setMap(null)); spotElsRef.current.clear(); };
+  }, [spots, ready]);
+
+  useEffect(() => {
+    spotElsRef.current.forEach((el, id) => {
+      el.classList.toggle("is-selected", id === selectedSpotId);
+      el.setAttribute("aria-pressed", String(id === selectedSpotId));
+    });
+  }, [selectedSpotId, spots, ready]);
+
+  useEffect(() => {
+    if (!ready || !mapRef.current || !waypoints) return;
+    const kakao = window.kakao;
+    const overlays = waypoints.map((waypoint, index) => {
+      const el = document.createElement("div");
+      el.className = "image-waypoint-marker";
+      el.textContent = String(index + 1);
+      el.setAttribute("role", "img");
+      el.setAttribute("aria-label", `경유지 ${index + 1}: ${waypoint.label} 주변 길`);
+      el.title = `${waypoint.label} 주변 길`;
+      const overlay = new kakao.maps.CustomOverlay({ position: new kakao.maps.LatLng(waypoint.point.lat, waypoint.point.lng), content: el, yAnchor: 0.5, zIndex: 4 });
+      overlay.setMap(mapRef.current);
+      return overlay;
+    });
+    return () => overlays.forEach(overlay => overlay.setMap(null));
+  }, [waypoints, ready]);
+
   // 생성된 경로를 출발점부터 차례로 그려 나간다
   useEffect(() => {
     const map = mapRef.current;
@@ -203,6 +293,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
     routeRef.current?.halo.setMap(null);
     routeRef.current?.line.setMap(null);
     routeRef.current?.turn.setMap(null);
+    routeRef.current?.completed.setMap(null);
     routeRef.current = null;
     if (!route || route.length < 2) return;
 
@@ -219,13 +310,18 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
     const line = new kakao.maps.Polyline({
       path: [],
       strokeWeight: 4.5,
-      strokeColor: "#0f0f0f",
+      strokeColor: walking ? "#a0a2a0" : "#0f0f0f",
       strokeOpacity: 0.95,
-      strokeStyle: "solid",
+      strokeStyle: walking ? "dash" : "solid",
       zIndex: 2,
     });
     halo.setMap(map);
     line.setMap(map);
+    const completed = new kakao.maps.Polyline({
+      path: [], strokeWeight: 4.5, strokeColor: "#318737",
+      strokeOpacity: 1, strokeStyle: "solid", zIndex: 3,
+    });
+    completed.setMap(map);
 
     // 반환점: 출발점에서 가장 먼 지점
     const origin = route[0];
@@ -247,13 +343,28 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
       yAnchor: 0.5,
       zIndex: 2,
     });
-    routeRef.current = { halo, line, turn };
+    routeRef.current = { halo, line, turn, completed };
 
     // 경로 전체가 보이도록 맞춘 뒤, 하단 시트에 가리지 않게 살짝 위로 올린다
     const bounds = new kakao.maps.LatLngBounds();
     route.forEach((p) => bounds.extend(toLatLng(p)));
-    map.setBounds(bounds);
-    map.panBy(0, 120);
+    const preview = document.querySelector<HTMLElement>("#todaysroad-app .course-preview");
+    const bottomPadding = !walking && preview && containerRef.current
+      ? Math.max(280, containerRef.current.clientHeight - preview.offsetTop - 40)
+      : walking ? 285 : 460;
+    map.setBounds(bounds, walking ? 140 : 165, 60, bottomPadding, 60);
+
+    const dispose = () => {
+      halo.setMap(null); line.setMap(null); turn.setMap(null); completed.setMap(null);
+      routeRef.current = null;
+    };
+    if (walking) {
+      const path = route.map(toLatLng);
+      halo.setPath(path);
+      line.setPath(path);
+      turn.setMap(map);
+      return dispose;
+    }
 
     // 점 사이를 보간하며 선을 늘려 나간다
     const segs = route.length - 1;
@@ -283,17 +394,59 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
     };
     raf = requestAnimationFrame(tick);
 
-    return () => cancelAnimationFrame(raf);
-  }, [route, ready, routeDrawMs]);
+    return () => { cancelAnimationFrame(raf); dispose(); };
+  }, [route, ready, routeDrawMs, walking]);
+
+  // Recolor existing polylines without recreating the map, resetting the camera,
+  // or replaying the route animation when the device appearance changes.
+  useEffect(() => {
+    const lines = routeRef.current;
+    if (!ready || !lines) return;
+    const styles = getComputedStyle(document.documentElement);
+    lines.halo.setOptions({ strokeColor: styles.getPropertyValue("--route-halo").trim() });
+    lines.line.setOptions({ strokeColor: styles.getPropertyValue(walking ? "--route-pending" : "--route-line").trim() });
+    lines.completed.setOptions({ strokeColor: styles.getPropertyValue("--green").trim() });
+  }, [theme, ready, route, walking, routeDrawMs]);
+
+  useEffect(() => {
+    if (!ready) return;
+    if (walking) positionBeforeWalkRef.current = { ...currentPosRef.current };
+    else {
+      currentPosRef.current = positionBeforeWalkRef.current;
+      const position = currentPosRef.current;
+      currentOverlayRef.current?.setPosition(new window.kakao.maps.LatLng(position.lat, position.lng));
+    }
+  }, [walking, ready]);
+
+  useEffect(() => {
+    if (!ready || walkProgress === null || !route?.length) return;
+    const { completed, position } = splitWalkPath(route, walkProgress);
+    const toLatLng = (point: { lat: number; lng: number }) => new window.kakao.maps.LatLng(point.lat, point.lng);
+    routeRef.current?.completed.setPath(completed.map(toLatLng));
+    currentPosRef.current = position;
+    currentOverlayRef.current?.setPosition(toLatLng(position));
+  }, [walkProgress, route, ready]);
 
   // 선택된 코스 마커 강조
   useEffect(() => {
     courseElsRef.current.forEach((el, id) => {
       el.classList.toggle("is-selected", id === selectedCourseId);
     });
-  }, [selectedCourseId]);
+  }, [selectedCourseId, ready]);
 
   useImperativeHandle(ref, () => ({
+    async captureAroundCurrentPosition(minutes, signal) {
+      const map = mapRef.current, kakao = window.kakao;
+      if (!map || !kakao) throw new ImageRouteError("MAP_UNAVAILABLE", "지도를 먼저 불러와야 해요. 잠시 후 다시 시도해주세요.");
+      const origin = await locateForSnapshot(signal);
+      signal.throwIfAborted();
+      currentPosRef.current = origin;
+      positionBeforeWalkRef.current = origin;
+      const pos = new kakao.maps.LatLng(origin.lat, origin.lng);
+      currentOverlayRef.current?.setPosition(pos);
+      map.panTo(pos);
+      return captureMapSnapshot(kakao, origin, minutes, signal);
+    },
     getCurrentPosition() {
       return { ...currentPosRef.current };
     },
@@ -308,6 +461,11 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
       const map = mapRef.current;
       const kakao = window.kakao;
       if (!map || !kakao) return;
+
+      if (walking) {
+        map.panTo(new kakao.maps.LatLng(currentPosRef.current.lat, currentPosRef.current.lng));
+        return;
+      }
 
       const panTo = (lat: number, lng: number) => {
         const pos = new kakao.maps.LatLng(lat, lng);

@@ -1,0 +1,10 @@
+{
+  "checkedOn": "2026-09-09",
+  "passed": [
+    "npm run build",
+    "development catalog returns 404",
+    "development route query ignored",
+    "legacy production course and empty-spot walk"
+  ],
+  "errors": []
+}

@@ -1,0 +1,258 @@
+{
+  "places": [
+    {
+      "id": "gwangheungdang",
+      "name": "광흥당",
+      "address": "서울시 마포구 독막로21길 15",
+      "point": {
+        "lat": 37.5486531328224,
+        "lng": 126.928729893327
+      },
+      "geometry": "point",
+      "location": {
+        "status": "verified",
+        "method": "마포문화원 주소와 카카오 주소·장소 검색의 건물명, 도로명·지번 일치. 장소 대표 좌표 사용.",
+        "evidence": [
+          {
+            "publisher": "카카오맵 장소 검색",
+            "url": "http://place.map.kakao.com/24375879",
+            "sourceFile": "docs/data/spot-location-review.json",
+            "sourceId": "24375879",
+            "checkedOn": "2026-09-09",
+            "asOf": "2026-09-09 주소·장소 검색 응답",
+            "limitations": [
+              "서비스가 제공한 대표 좌표이며 오차 범위는 제공되지 않았어요."
+            ]
+          }
+        ],
+        "limitations": [
+          "대표 좌표이며 정확한 출입구 위치나 현장 실측 좌표가 아니에요.",
+          "현장 접근 경로와 운영시간·출입 가능 여부는 확인하지 않았어요."
+        ]
+      }
+    },
+    {
+      "id": "gyeongui-sinsu-segment",
+      "name": "경의선숲길 신수동 구간",
+      "address": null,
+      "point": null,
+      "geometry": "segment",
+      "location": {
+        "status": "unverified",
+        "method": "주소 또는 장소 설명만 확인. 좌표·대상 구간 검증 전.",
+        "evidence": [],
+        "limitations": [
+          "현장 위치와 접근 경로는 확인하지 않았어요."
+        ]
+      }
+    },
+    {
+      "id": "gwangheungchang-site-area",
+      "name": "광흥창 터 일대",
+      "address": null,
+      "point": null,
+      "geometry": "area",
+      "location": {
+        "status": "unverified",
+        "method": "주소 또는 장소 설명만 확인. 좌표·대상 구간 검증 전.",
+        "evidence": [],
+        "limitations": [
+          "현장 위치와 접근 경로는 확인하지 않았어요."
+        ]
+      }
+    },
+    {
+      "id": "gongmin-shrine",
+      "name": "공민왕 사당",
+      "address": "서울 마포구 창전동 446-5",
+      "point": {
+        "lat": 37.5486133767492,
+        "lng": 126.928544343855
+      },
+      "geometry": "point",
+      "location": {
+        "status": "verified",
+        "method": "카카오 장소 ID 8236081의 공민왕사당. 서울시 기사·마포문화원 소개의 광흥당 인접 관계와 대조.",
+        "evidence": [
+          {
+            "publisher": "카카오맵 장소 검색",
+            "url": "http://place.map.kakao.com/8236081",
+            "sourceFile": "docs/data/spot-location-review.json",
+            "sourceId": "8236081",
+            "checkedOn": "2026-09-09",
+            "asOf": "2026-09-09 주소·장소 검색 응답",
+            "limitations": [
+              "서비스가 제공한 대표 좌표이며 오차 범위는 제공되지 않았어요."
+            ]
+          }
+        ],
+        "limitations": [
+          "대표 좌표이며 정확한 출입구 위치나 현장 실측 좌표가 아니에요.",
+          "현장 접근 경로와 운영시간·출입 가능 여부는 확인하지 않았어요."
+        ]
+      }
+    },
+    {
+      "id": "building-1015116771",
+      "name": "독막로 176-1 건물",
+      "address": "서울특별시 마포구 독막로 176-1 (구수동 11)",
+      "point": {
+        "lat": 37.5472283676166,
+        "lng": 126.933170665514
+      },
+      "geometry": "point",
+      "location": {
+        "status": "verified",
+        "method": "대장 일련번호 1015116771의 독막로 176-1·구수동 11 주소와 카카오 주소 검색 일치. 주소 대표 좌표 사용.",
+        "evidence": [
+          {
+            "publisher": "카카오맵 주소 검색",
+            "url": "https://apis.map.kakao.com/web/sample/addr2coord/",
+            "sourceFile": "docs/data/spot-location-review.json",
+            "sourceId": "서울 마포구 독막로 176-1",
+            "checkedOn": "2026-09-09",
+            "asOf": "2026-09-09 주소·장소 검색 응답",
+            "limitations": [
+              "서비스가 제공한 대표 좌표이며 오차 범위는 제공되지 않았어요."
+            ]
+          }
+        ],
+        "limitations": [
+          "대표 좌표이며 정확한 출입구 위치나 현장 실측 좌표가 아니에요.",
+          "현장 접근 경로와 운영시간·출입 가능 여부는 확인하지 않았어요."
+        ]
+      }
+    }
+  ],
+  "stories": [
+    {
+      "id": "gwangheungdang-building",
+      "placeId": "gwangheungdang",
+      "title": "한옥에서 이어지는 동네의 문화",
+      "summary": "광흥당은 전통문화를 배우고 향토 이야기를 만나는 한옥문화공간이에요. 마포문화원 소개에는 청소년 등을 위한 교육 프로그램도 담겨 있어요.",
+      "detail": "한옥의 모습에 더해, 동네의 문화를 배우는 공간이라는 쓰임을 떠올려 보세요. 소개에 기재된 연면적은 382㎡로, 대지면적과는 다른 값이에요.",
+      "category": "building",
+      "claimKind": "fact",
+      "review": "approved",
+      "storyKey": "gwangheungdang-building",
+      "evidence": [
+        {
+          "publisher": "마포문화원",
+          "url": "http://www.mapocc.or.kr/page/page5",
+          "sourceFile": "gwangheungdang-official.html",
+          "sourceId": "gwangheungdang-building",
+          "checkedOn": "2026-09-07",
+          "asOf": "게시일 미제공 · 2026-09-07 수집본",
+          "limitations": [
+            "연면적과 대지면적은 서로 다른 값",
+            "건물 높이·준공연도는 미확보",
+            "2026-09-07 수집 당시: 주소만 확인했으며 좌표 변환과 코스 거리 검증은 하지 않음"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gyeongui-railway-to-park",
+      "placeId": "gyeongui-sinsu-segment",
+      "title": "산책길이 되기 전에는 철길",
+      "summary": "경의선숲길은 옛 철길을 바꾼 공원이에요. 2012년 대흥동 구간부터 시작해 신수동 등을 포함한 전체 구간이 2016년에 조성됐어요.",
+      "detail": "익숙한 산책길이 예전에는 철길이었다는 변화를 떠올려 보세요. 2012년 대흥동 구간 개장과 2016년 전체 조성은 공원 전체의 이력이에요. 신수동 구간만의 연혁이나 길이를 뜻하지 않아요.",
+      "category": "change",
+      "claimKind": "fact",
+      "review": "approved",
+      "storyKey": "gyeongui-railway-to-park",
+      "evidence": [
+        {
+          "publisher": "서울특별시 정원도시 서울",
+          "url": "https://parks.seoul.go.kr/search/list.do?searchWd=%EC%88%B2",
+          "sourceFile": "gyeongui-parks-official.html",
+          "sourceId": "gyeongui-railway-to-park",
+          "checkedOn": "2026-09-07",
+          "asOf": "2012~2016 조성 이력",
+          "limitations": [
+            "6.3km는 전체 공원 길이이며 신수동 구간 길이가 아님",
+            "신수동 구간의 정확한 geometry는 미확보"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gwangheungchang-warehouse",
+      "placeId": "gwangheungchang-site-area",
+      "title": "광흥창의 ‘창’은 창고",
+      "summary": "광흥창 터 일대에는 관리들에게 줄 녹봉을 보관하던 창고가 있었어요. 지금의 지명에서 그 장소의 옛 쓰임을 떠올릴 수 있어요.",
+      "detail": "서울시 시민기자 기사는 공민왕 사당 근처의 광흥창 터를 소개해요. 옛 창고 건물이 지금 남아 있다는 뜻은 아니에요. 터의 범위와 정확한 위치는 아직 확인하지 못했어요.",
+      "category": "history",
+      "claimKind": "fact",
+      "review": "approved",
+      "storyKey": "gwangheungchang-origins",
+      "evidence": [
+        {
+          "publisher": "서울특별시 내 손안에 서울 / 시민기자 임영근",
+          "url": "https://mediahub.seoul.go.kr/archives/185431",
+          "sourceFile": "gongmin-seoul-story.html",
+          "sourceId": "gwangheungchang-warehouse",
+          "checkedOn": "2026-09-07",
+          "asOf": "2014-03-14 게시 자료의 역사 설명",
+          "limitations": [
+            "옛 창고 건물이 지금 남아 있다는 의미가 아님",
+            "2026-09-07 수집 당시: 터의 정확한 좌표를 확보하지 않았음"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gongmin-local-legend",
+      "placeId": "gongmin-shrine",
+      "title": "창고 관리인의 꿈에 나타난 왕",
+      "summary": "창고를 지키던 이의 꿈에 공민왕이 나타나 자신을 기리는 사당을 지어 달라고 했다는 이야기가 전해져요. 공민왕 사당에 얽힌 전승이에요.",
+      "detail": "서울시 시민기자 기사가 소개한 전승으로, 꿈과 사당 건립의 인과관계를 역사적 사실로 확인한 것은 아니에요. 장소에 얽힌 이야기를 가볍게 읽어 보세요.",
+      "category": "history",
+      "claimKind": "folklore",
+      "review": "approved",
+      "storyKey": "gwangheungchang-origins",
+      "evidence": [
+        {
+          "publisher": "서울특별시 내 손안에 서울 / 시민기자 임영근",
+          "url": "https://mediahub.seoul.go.kr/archives/185431",
+          "sourceFile": "gongmin-seoul-story.html",
+          "sourceId": "gongmin-local-legend",
+          "checkedOn": "2026-09-07",
+          "asOf": "2014-03-14 게시 자료",
+          "limitations": [
+            "역사적 사건으로 단정하지 않고 반드시 전승이라고 표시",
+            "사당 운영시간·현재 행사 일정은 미확인",
+            "광흥창 터 카드와 가까운 소재이므로 같은 산책에서 중복 노출 제한 권장"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "building-1015116771-approval",
+      "placeId": "building-1015116771",
+      "title": "올려다본 건물, 기록 속의 시간",
+      "summary": "독막로 176-1 건물을 올려다보며 기록 속의 시간을 떠올려 보세요. 건축물대장에는 사용승인일이 2001년 7월 11일로 적혀 있어요.",
+      "detail": "대장에는 지상 3층, 지하 0층, 높이 7.9m가 기재되어 있어요. 사용승인일은 최초 준공일이나 착공일과 같은 뜻이 아니며, 높이는 현장에서 새로 잰 값이 아니에요.",
+      "category": "building",
+      "claimKind": "fact",
+      "review": "approved",
+      "storyKey": "building-1015116771-approval",
+      "evidence": [
+        {
+          "publisher": "서울특별시 건축물대장 표제부 · 공공누리 제1유형",
+          "url": "https://data.seoul.go.kr/dataList/OA-22424/S/1/datasetView.do",
+          "sourceFile": "building-selected.json / building-selected-response.txt",
+          "sourceId": "BDRG_SN=1015116771",
+          "checkedOn": "2026-09-07",
+          "asOf": "2026-09-07 조회 대장 · 사용승인일 2001-07-11",
+          "limitations": [
+            "사용승인일을 최초 준공일·착공일과 동일시하지 않음",
+            "높이는 대장 기재값이며 현장 실측값이 아님",
+            "2026-09-07 수집 당시: 광흥창 인근 주소 후보이며 코스와의 거리·교차는 미검증",
+            "공개 Sheet 내부 조회 경로는 정식 API 계약이 아니므로 운영용 안정성은 별도 확인"
+          ]
+        }
+      ]
+    }
+  ]
+}

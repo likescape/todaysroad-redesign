@@ -1,0 +1,183 @@
+{
+  "checkedOn": "2026-09-09",
+  "provider": "Kakao Maps Web SDK services, localhost:3000",
+  "sourceOriginalsUnchanged": true,
+  "previousState": "mixed-card-candidates.json: all automatic display false; building route_match_verified false",
+  "decision": "Point candidates only; source identity/address cross-check separate from runtime route matching. Provider precision and walking access unknown.",
+  "accepted": [
+    {
+      "placeId": "gwangheungdang",
+      "response": {
+        "address_name": "서울 마포구 창전동 42-1",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "교육,학문 > 교육단체 > 체험학습장",
+        "distance": "",
+        "id": "24375879",
+        "phone": "02-322-4450",
+        "place_name": "광흥당",
+        "place_url": "http://place.map.kakao.com/24375879",
+        "road_address_name": "서울 마포구 독막로21길 15",
+        "x": "126.928729893327",
+        "y": "37.5486531328224"
+      }
+    },
+    {
+      "placeId": "building-1015116771",
+      "response": {
+        "address": {
+          "address_name": "서울 마포구 구수동 11",
+          "b_code": "1144011300",
+          "h_code": "1144063000",
+          "main_address_no": "11",
+          "mountain_yn": "N",
+          "region_1depth_name": "서울",
+          "region_2depth_name": "마포구",
+          "region_3depth_h_name": "신수동",
+          "region_3depth_name": "구수동",
+          "sub_address_no": "",
+          "x": "126.933170665514",
+          "y": "37.5472283676166"
+        },
+        "address_name": "서울 마포구 독막로 176-1",
+        "address_type": "ROAD_ADDR",
+        "road_address": {
+          "address_name": "서울 마포구 독막로 176-1",
+          "building_name": "",
+          "main_building_no": "176",
+          "region_1depth_name": "서울",
+          "region_2depth_name": "마포구",
+          "region_3depth_name": "구수동",
+          "road_name": "독막로",
+          "sub_building_no": "1",
+          "underground_yn": "N",
+          "x": "126.933170665514",
+          "y": "37.5472283676166",
+          "zone_no": "04087"
+        },
+        "x": "126.933170665514",
+        "y": "37.5472283676166"
+      }
+    },
+    {
+      "placeId": "gongmin-shrine",
+      "response": {
+        "address_name": "서울 마포구 창전동 446-5",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "여행 > 관광,명소 > 문화유적 > 사당,제단",
+        "distance": "",
+        "id": "8236081",
+        "phone": "",
+        "place_name": "공민왕사당",
+        "place_url": "http://place.map.kakao.com/8236081",
+        "road_address_name": "",
+        "x": "126.928544343855",
+        "y": "37.5486133767492"
+      }
+    }
+  ],
+  "gwangheungdangAddressCrossCheck": {
+    "query": "서울특별시 마포구 독막로21길 15",
+    "status": "OK",
+    "rows": [
+      {
+        "address": {
+          "address_name": "서울 마포구 창전동 42-1",
+          "b_code": "1144011400",
+          "h_code": "1144065500",
+          "main_address_no": "42",
+          "mountain_yn": "N",
+          "region_1depth_name": "서울",
+          "region_2depth_name": "마포구",
+          "region_3depth_h_name": "서강동",
+          "region_3depth_name": "창전동",
+          "sub_address_no": "1",
+          "x": "126.928706582608",
+          "y": "37.5486522177452"
+        },
+        "address_name": "서울 마포구 독막로21길 15",
+        "address_type": "ROAD_ADDR",
+        "road_address": {
+          "address_name": "서울 마포구 독막로21길 15",
+          "building_name": "광흥당",
+          "main_building_no": "15",
+          "region_1depth_name": "서울",
+          "region_2depth_name": "마포구",
+          "region_3depth_name": "창전동",
+          "road_name": "독막로21길",
+          "sub_building_no": "",
+          "underground_yn": "N",
+          "x": "126.928706582608",
+          "y": "37.5486522177452",
+          "zone_no": "04065"
+        },
+        "x": "126.928706582608",
+        "y": "37.5486522177452"
+      }
+    ]
+  },
+  "parkSearch": {
+    "query": "경의선숲길 신수동",
+    "status": "OK",
+    "parkResults": [
+      {
+        "address_name": "서울 마포구 대흥동 325-82",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "여행 > 공원",
+        "distance": "",
+        "id": "1524861109",
+        "phone": "",
+        "place_name": "경의선숲길",
+        "place_url": "http://place.map.kakao.com/1524861109",
+        "road_address_name": "",
+        "x": "126.943148698793",
+        "y": "37.5462426746628"
+      },
+      {
+        "address_name": "서울 마포구 동교동 190-1",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "여행 > 공원",
+        "distance": "",
+        "id": "1158487374",
+        "phone": "02-719-8830",
+        "place_name": "경의선숲길",
+        "place_url": "http://place.map.kakao.com/1158487374",
+        "road_address_name": "",
+        "x": "126.925338455597",
+        "y": "37.558803479324"
+      },
+      {
+        "address_name": "서울 마포구 연남동 375",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "여행 > 공원",
+        "distance": "",
+        "id": "27388917",
+        "phone": "",
+        "place_name": "경의선숲길",
+        "place_url": "http://place.map.kakao.com/27388917",
+        "road_address_name": "",
+        "x": "126.923099173686",
+        "y": "37.5616023398319"
+      },
+      {
+        "address_name": "서울 용산구 용문동 5-133",
+        "category_group_code": "",
+        "category_group_name": "",
+        "category_name": "여행 > 공원 > 도시근린공원",
+        "distance": "",
+        "id": "27455973",
+        "phone": "",
+        "place_name": "경의선숲길공원",
+        "place_url": "http://place.map.kakao.com/27455973",
+        "road_address_name": "",
+        "x": "126.95930819292113",
+        "y": "37.53939454468178"
+      }
+    ],
+    "decision": "No verified Sinsu segment geometry. Do not substitute Daeheung, Yeonnam or Donggyo representative pins."
+  }
+}

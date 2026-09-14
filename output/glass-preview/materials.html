@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="오늘의길 코스 확인과 이야기 상세 화면의 Clear, Regular, Dense 유리 재질 비교 시안">
+  <title>오늘의길 · 세 가지 유리 재질</title>
+  <link rel="icon" href="assets/leaf-logo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="preview.css">
+  <link rel="stylesheet" href="materials.css">
+  <script src="map-data.js" defer></script>
+  <script src="preview.js" defer></script>
+  <script src="materials.js" defer></script>
+</head>
+<body>
+  <main id="glass-preview" class="material-studio" data-mode="light" data-material-scene="course">
+    <header class="material-header">
+      <a class="studio-brand" href="index.html"><img src="assets/leaf-logo.png" alt="" width="28" height="28"><span>오늘의길</span></a>
+      <span class="edition">LIQUID GLASS <span>/</span> MATERIAL STUDY</span>
+      <a class="plan-link" href="plan.md">디자인 계획 ↗</a>
+    </header>
+
+    <section class="material-intro" aria-labelledby="study-title">
+      <div><h1 id="study-title">세 가지 유리 재질</h1><p>같은 화면과 배치, 재질의 차이만 나란히.</p></div>
+      <div class="material-controls">
+        <div class="control-group" role="group" aria-label="비교할 화면">
+          <button type="button" data-material-scene="course" aria-pressed="true">01 코스 확인</button>
+          <button type="button" data-material-scene="story" aria-pressed="false">02 이야기 상세</button>
+        </div>
+        <div class="control-group" role="group" aria-label="모든 화면의 테마">
+          <button type="button" data-mode="light" aria-pressed="true"><span data-icon="sun"></span>라이트</button>
+          <button type="button" data-mode="dark" aria-pressed="false"><span data-icon="moon"></span>다크</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="material-grid" aria-label="Clear, Regular, Dense 재질 동시 비교">
+      <article class="material-column" data-option="clear">
+        <header class="material-caption"><div class="material-name"><span class="material-index">A</span><h2>Clear</h2></div><div class="material-values"><span>불투명도 <strong data-alpha>62%</strong></span><span>블러 <strong>16px</strong></span></div></header>
+        <div class="phone-shell"><div class="phone" data-material="clear" data-theme="light" data-state="course" role="img" aria-label="Clear 재질 · 코스 확인 화면 시안" inert></div></div>
+        <footer class="material-caption-bottom"><strong>배경이 드러나는 가벼움</strong><span>문서의 적용 대상 · 버튼, 하단 탐색</span></footer>
+      </article>
+      <article class="material-column" data-option="regular">
+        <header class="material-caption"><div class="material-name"><span class="material-index">B</span><h2>Regular</h2></div><div class="material-values"><span>불투명도 <strong data-alpha>76%</strong></span><span>블러 <strong>20px</strong></span></div></header>
+        <div class="phone-shell"><div class="phone" data-material="regular" data-theme="light" data-state="course" role="img" aria-label="Regular 재질 · 코스 확인 화면 시안" inert></div></div>
+        <footer class="material-caption-bottom"><strong>정보와 배경의 균형</strong><span>문서의 적용 대상 · 코스, 추천, 일반 카드</span></footer>
+      </article>
+      <article class="material-column" data-option="dense">
+        <header class="material-caption"><div class="material-name"><span class="material-index">C</span><h2>Dense</h2></div><div class="material-values"><span>불투명도 <strong data-alpha>90%</strong></span><span>블러 <strong>24px</strong></span></div></header>
+        <div class="phone-shell"><div class="phone" data-material="dense" data-theme="light" data-state="course" role="img" aria-label="Dense 재질 · 코스 확인 화면 시안" inert></div></div>
+        <footer class="material-caption-bottom"><strong>본문에 집중하는 차분함</strong><span>문서의 적용 대상 · 이야기, 대화상자, 입력</span></footer>
+      </article>
+    </section>
+
+    <footer class="material-footer"><p>비교를 위해 각 열의 모든 유리 표면에 한 재질을 적용했습니다. 실제 적용 계획은 표면의 역할에 따라 세 재질을 함께 사용합니다.</p><span>정적 화면 시안 · 지도 © OpenStreetMap contributors</span></footer>
+    <p class="sr-only" id="preview-announcement" role="status" aria-live="polite"></p>
+  </main>
+  <noscript><p class="noscript">JavaScript를 켜면 세 가지 재질을 비교할 수 있습니다.</p></noscript>
+</body>
+</html>

@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --hostname 127.0.0.1 --port 8000",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start --hostname 127.0.0.1 --port 8000",
+    "lint": "next lint",
+    "test": "node scripts/test-journal.mjs"
   },
   "dependencies": {
     "motion": "^13.1.1",
