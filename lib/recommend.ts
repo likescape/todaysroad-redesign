@@ -2,20 +2,9 @@ import type { Course } from "./courses";
 import type { RecommendPrefs } from "./types";
 import { ImageRouteError, parseSegmentation, type MapSnapshot } from "./map-segmentation";
 import { planImageRoute, type ImageRoutePlan } from "./image-route-planner";
+import { MOOD_TAGS } from "./recommend-options";
 
-export interface MoodTag { id: string; emoji: string; label: string }
-export const MOOD_TAGS: MoodTag[] = [
-  { id: "nature", emoji: "🌿", label: "자연적인" },
-  { id: "urban", emoji: "🏙️", label: "도시적인" },
-  { id: "quiet", emoji: "🤫", label: "조용한" },
-  { id: "lively", emoji: "🎉", label: "활기찬" },
-  { id: "river", emoji: "🌊", label: "강변" },
-  { id: "alley", emoji: "🏘️", label: "골목길" },
-  { id: "night", emoji: "🌙", label: "야경" },
-  { id: "cafe", emoji: "☕", label: "카페 투어" },
-  { id: "hill", emoji: "⛰️", label: "언덕" },
-  { id: "flat", emoji: "🚶", label: "평지" },
-];
+export { MOOD_TAGS, type MoodTag } from "./recommend-options";
 export interface LatLng { lat: number; lng: number }
 export const GENERATION_STEPS = [
   "현재 위치의 지도 담기", "길·자연·건물·아이콘 구분", "산책 전략 구성", "카테고리 필터링", "경유지 선택", "길을 따라 연결", "코스 완성",

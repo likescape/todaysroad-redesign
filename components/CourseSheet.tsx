@@ -5,28 +5,19 @@ import { motion } from "motion/react";
 import type { Course } from "@/lib/courses";
 import { islandSpring } from "@/lib/motion";
 import LocateButton from "./LocateButton";
-import { CourseStories } from "./SpotUI";
-import type { ResolvedSpot } from "@/lib/spots";
 import MapAnalysisPreview from "./MapAnalysisPreview";
+import { PREVIEW_COURSE } from "@/lib/walk";
 
 export default function CourseSheet({
   course,
   onClose,
   onStart,
   onLocate,
-  spots,
-  selectedSpotId,
-  onSelectSpot,
-  onAllStories,
 }: {
   course: Course;
   onClose: () => void;
   onStart: () => void;
   onLocate: () => void;
-  spots: ResolvedSpot[];
-  selectedSpotId: string | null;
-  onSelectSpot: (id: string) => void;
-  onAllStories: () => void;
 }) {
   return (
     <motion.section
@@ -51,7 +42,7 @@ export default function CourseSheet({
       <div className="sheet-eyebrow">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <BrandIcon size={18} />
-        {course.id === "dev-spot-route" ? "개발 미리보기 · 가상 경로" : course.generated ? "방금 만든 오늘의 코스" : "오늘의 추천 코스"}
+        {course.id === PREVIEW_COURSE.id ? "예시 코스 미리보기" : course.generated ? "방금 만든 오늘의 코스" : "오늘의 추천 코스"}
       </div>
       <div className="sheet-body">
         <div className="sheet-info">
@@ -98,7 +89,6 @@ export default function CourseSheet({
         <div className="image-route-notes">{course.imageAnalysis.notes.map(note => <p key={note}>{note}</p>)}</div>
         <details className="image-route-evidence"><summary>지도에서 찾은 요소 보기</summary><MapAnalysisPreview image={course.imageAnalysis.snapshot} segmentation={course.imageAnalysis.segmentation} pixels={course.imageAnalysis.pixels} waypoints={course.imageAnalysis.waypoints} /></details>
       </>}
-      <CourseStories spots={spots} selectedId={selectedSpotId} onSelect={onSelectSpot} onShowAll={onAllStories} />
       </div>
       <button type="button" className="walk-start" onClick={onStart}>
         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3.8c0-.8.9-1.3 1.6-.9l13 8.2a1 1 0 0 1 0 1.8l-13 8.2c-.7.4-1.6-.1-1.6-.9V3.8Z" /></svg>

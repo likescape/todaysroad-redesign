@@ -6,7 +6,7 @@ type Point = { lat: number; lng: number };
 export const PREVIEW_COURSE: Course = {
   id: "walk-preview", markerName: "조용한 산책", markerMeta: "2.0km · 30분",
   title: "조용한 산책", distance: "2.0km", duration: "30분", difficulty: "쉬움",
-  description: "현재 위치에서 출발해 다시 돌아오는 코스예요.",
+  description: "산책 흐름을 체험하는 고정 예시예요. 거리·시간·이동은 미리보기 값이며, 현재 위치나 선택한 조건은 반영하지 않아요.",
   lat: 37.5502, lng: 126.9304,
   path: [
     { lat: 37.5502, lng: 126.9304 }, { lat: 37.5513, lng: 126.9301 },

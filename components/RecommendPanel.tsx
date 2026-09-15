@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import Segmented from "./Segmented";
 import { softSpring, staggerItem } from "@/lib/motion";
 import type { RecommendPrefs } from "@/lib/types";
-import { MOOD_TAGS as TAGS } from "@/lib/recommend";
+import { MOOD_TAGS as TAGS } from "@/lib/recommend-options";
 
 const TIMES: RecommendPrefs["minutes"][] = [15, 30, 60, 90];
 
@@ -84,7 +84,7 @@ export default function RecommendPanel({
         </div>
       </motion.div>
 
-      <p className="rp-image-note">현재 위치의 지도에서 길과 장소를 찾아 연결해요. 지도 이미지는 코스 생성을 위해 OpenAI로 전송돼요.</p>
+      <p className="rp-preview-note">지금은 선택한 조건과 관계없이 같은 예시 코스를 보여드려요.</p>
       <motion.div className="rp-footer" {...staggerItem(3)}>
         <span className="rp-summary">{summary}</span>
         <motion.button

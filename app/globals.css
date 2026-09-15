@@ -1598,30 +1598,18 @@ html[data-theme="dark"] .current-marker-dot { border-color: #e5f1ff; }
 @media (max-width: 360px) { .appearance-options { gap: 8px; }.appearance-option-label { font-size: 12px; gap: 4px; } }
 @media (prefers-reduced-motion: reduce) { .rp-tag { transition: none; } }
 
-/* Optional discoveries share the course snapshot and never cover walk controls. */
+/* Scrollable course content keeps the walk action visible. */
 .course-preview .course-sheet { display: flex; flex-direction: column; overflow: visible; }
 .course-sheet-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px; margin: 0 -4px; }
 .course-preview .walk-start { flex-shrink: 0; }
-.course-stories { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
-.spot-section-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 5px; margin-bottom: 6px; }
-.spot-section-heading h3 { margin: 0; font-size: 13px; font-weight: 750; }
-.spot-section-heading > span { color: var(--ink-soft); font-size: 10px; }
+/* Development-only POI reference catalog. */
 .spot-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
 .spot-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 54px; padding: 9px 7px; text-align: left; border-radius: 13px; }
 .spot-row:hover, .spot-row[aria-pressed="true"] { background: var(--green-soft); }
-.spot-number { flex: 0 0 26px; width: 26px; height: 30px; border-radius: 12px 12px 12px 3px; display: grid; place-items: center; background: var(--green-soft); color: var(--green); font-size: 12px; font-weight: 750; }
 .spot-row-copy { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .spot-row strong { font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 .spot-row small { font-size: 11px; line-height: 1.4; color: var(--ink-soft); }
 .spot-row > svg { flex-shrink: 0; width: 14px; height: 14px; color: var(--muted); }
-.spot-empty { margin: 8px 0 2px; color: var(--ink-soft); font-size: 12px; line-height: 1.7; word-break: keep-all; }
-.spot-marker { display: flex; align-items: center; justify-content: center; gap: 3px; min-width: 44px; min-height: 44px; padding: 4px 8px; border: 2px solid var(--surface); border-radius: 18px 18px 18px 4px; color: var(--on-green); background: var(--green); box-shadow: var(--shadow-float); cursor: pointer; }
-.spot-marker span { font-size: 23px; line-height: 1; }
-.spot-marker b { font-size: 13px; }
-.spot-marker.is-selected { outline: 3px solid var(--ink); outline-offset: 3px; }
-.walk-stories { position: absolute; bottom: calc(218px + env(safe-area-inset-bottom)); left: 24px; z-index: 20; display: flex; align-items: center; gap: 8px; min-height: 44px; max-width: calc(100% - 100px); border-radius: 999px; padding: 9px 14px; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-card); font-size: 13px; font-weight: 650; }
-.walk-stories > span { color: var(--green); font-size: 22px; line-height: 1; }
-.walk-stories strong { color: var(--green); }
 .spot-detail.journal-dialog { display: flex; flex-direction: column; overflow: hidden; padding-inline: 20px; }
 .spot-detail > h2 { flex-shrink: 0; padding-right: 30px; font-size: 23px; line-height: 1.4; word-break: keep-all; }
 .spot-detail .dialog-handle { flex-shrink: 0; margin-bottom: 18px; }
@@ -1634,7 +1622,7 @@ html[data-theme="dark"] .current-marker-dot { border-color: #e5f1ff; }
 .spot-detail-copy { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; line-height: 1.9; word-break: keep-all; }
 .spot-observation { display: flex; align-items: flex-start; gap: 9px; padding: 13px; border-radius: 14px; background: var(--green-soft); color: var(--ink-soft); font-size: 13px; line-height: 1.7; }
 .spot-observation p { margin: 0; }
-.spot-optional, .spot-list-intro { color: var(--ink-soft); font-size: 12px; line-height: 1.7; margin: 14px 0; }
+.spot-optional { color: var(--ink-soft); font-size: 12px; line-height: 1.7; margin: 14px 0; }
 .spot-sources { border-top: 1px solid var(--border); font-size: 12px; line-height: 1.7; margin-top: 18px; }
 .spot-sources > summary { padding: 14px 3px; cursor: pointer; color: var(--ink-soft); font-weight: 650; min-height: 44px; }
 .spot-sources a, .spot-catalog a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
@@ -1646,26 +1634,19 @@ html[data-theme="dark"] .current-marker-dot { border-color: #e5f1ff; }
 .spot-evidence dd { margin: 0; }
 .spot-evidence p { margin: 5px 0; }
 .spot-return { width: 100%; flex-shrink: 0; margin-top: 18px; min-height: 46px; }
-.spot-walk-list .journal-secondary { width: 100%; margin-top: 4px; }
 .spot-review-note { font-size: 12px; line-height: 1.6; background: var(--warning-soft); color: var(--ink-soft); padding: 10px; border-radius: 10px; }
-.spot-preview-label { position: absolute; top: 115px; left: 24px; z-index: 20; background: var(--surface); color: var(--ink-soft); padding: 7px 10px; border-radius: 10px; font-size: 11px; pointer-events: none; }
 .spot-catalog { overflow-y: auto; background: var(--screen-bg); }
 .spot-catalog-content { padding: 45px 24px; }
 .spot-catalog h1 { font-size: 26px; line-height: 1.5; }
 .spot-catalog-content > p { font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .spot-catalog .spot-list { margin: 22px 0; }
 .spot-catalog a { display: inline-block; padding-block: 8px; font-size: 13px; }
-@media (max-width: 360px) { .spot-detail > h2 { font-size: 21px; }.spot-section-heading > span { font-size: 10px; }.spot-row { gap: 8px; } }
-.spot-map-anchor { position: relative; width: 0; height: 0; }
-.spot-map-anchor .spot-marker { position: absolute; bottom: 12px; width: 50px; border-radius: 17px; }
-.spot-map-stem { position: absolute; bottom: 0; left: -1px; width: 2px; background: var(--green); transform-origin: bottom center; }
-.spot-map-dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border: 2px solid var(--surface); border-radius: 50%; background: var(--green); }
+@media (max-width: 360px) { .spot-detail > h2 { font-size: 21px; }.spot-row { gap: 8px; } }
 .course-preview { max-height: min(440px, calc(100% - 340px - env(safe-area-inset-bottom))); }
-.spot-section-heading > button { color: var(--green); font-size: 11px; font-weight: 600; min-height: 32px; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 500px) and (max-height: 740px) { .course-preview .sheet-desc { display: none; }.course-preview .sheet-photo-wrap { display: none; }.course-preview .sheet-title { font-size: 20px; } }
 
 /* Image-based course generation */
-.rp-image-note { color: var(--ink-soft); font-size: 11px; line-height: 1.65; margin: 0; word-break: keep-all; }
+.rp-preview-note { color: var(--ink-soft); font-size: 12px; line-height: 1.65; margin: 0; word-break: keep-all; }
 .generating-pill { max-width: calc(100% - 32px); min-height: 60px; height: auto; padding: 8px 10px 8px 16px; }
 .generation-stage { display: flex; flex-direction: column; gap: 3px; white-space: normal; line-height: 1.4; }
 .generation-stage small { color: var(--ink-soft); font-size: 10px; }

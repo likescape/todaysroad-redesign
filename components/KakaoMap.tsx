@@ -10,9 +10,6 @@ import {
 import { CURRENT_LOCATION, MAP_CENTER, type Course } from "@/lib/courses";
 import { splitWalkPath } from "@/lib/walk";
 import { useTheme } from "./ThemeProvider";
-import type { ResolvedSpot } from "@/lib/spots";
-import { captureMapSnapshot, locateForSnapshot } from "@/lib/map-snapshot";
-import { ImageRouteError, type MapSnapshot } from "@/lib/map-segmentation";
 import type { ImageWaypoint } from "@/lib/image-route-planner";
 
 export interface KakaoMapHandle {
@@ -21,7 +18,6 @@ export interface KakaoMapHandle {
   resetView: () => void;
   /** 현재 위치 마커가 놓인 좌표 */
   getCurrentPosition: () => { lat: number; lng: number };
-  captureAroundCurrentPosition: (minutes: number, signal: AbortSignal) => Promise<MapSnapshot>;
 }
 
 interface KakaoMapProps {
@@ -34,9 +30,6 @@ interface KakaoMapProps {
   routeDrawMs?: number;
   /** Simulated progress for the walking UI preview; null means no active walk. */
   walkProgress?: number | null;
-  spots: ResolvedSpot[];
-  selectedSpotId: string | null;
-  onSelectSpot: (id: string) => void;
   waypoints?: ImageWaypoint[];
 }
 
@@ -104,7 +97,7 @@ function createCourseEl(course: Course, onClick: () => void) {
 }
 
 const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
-  { courses, selectedCourseId, onSelectCourse, route = null, routeDrawMs = 1600, walkProgress = null, spots, selectedSpotId, onSelectSpot, waypoints },
+  { courses, selectedCourseId, onSelectCourse, route = null, routeDrawMs = 1600, walkProgress = null, waypoints },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -113,7 +106,6 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
   const currentPosRef = useRef(CURRENT_LOCATION);
   const currentOverlayRef = useRef<any>(null);
   const courseElsRef = useRef<Map<string, HTMLElement>>(new Map());
-  const spotElsRef = useRef<Map<string, HTMLElement>>(new Map());
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
   const routeRef = useRef<{ halo: any; line: any; turn: any; completed: any } | null>(null);
@@ -122,8 +114,6 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
 
   const onSelectRef = useRef(onSelectCourse);
   onSelectRef.current = onSelectCourse;
-  const onSpotRef = useRef(onSelectSpot);
-  onSpotRef.current = onSelectSpot;
 
   useEffect(() => {
     let cancelled = false;
@@ -212,60 +202,6 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
       setReady(false);
     };
   }, [courses]);
-
-  // Keep elements stable while opening a story, changing theme, or ticking the timer.
-  // Stable nodes let the common dialog return keyboard focus to the initiating marker.
-  useEffect(() => {
-    const map = mapRef.current, kakao = window.kakao;
-    if (!ready || !map || !kakao) return;
-    const overlays: any[] = [];
-    spots.forEach(({ story, place, link }) => {
-      if (!place.point || place.location.status !== "verified") return;
-      const el = document.createElement("button");
-      el.type = "button";
-      el.className = "spot-marker";
-      el.dataset.spotId = story.id;
-      el.setAttribute("aria-label", `경로 주변 이야기 ${link.order}: ${story.title}, ${place.name}`);
-      el.setAttribute("aria-haspopup", "dialog");
-      el.setAttribute("aria-pressed", "false");
-      const icon = document.createElement("span");
-      icon.textContent = "✧";
-      icon.setAttribute("aria-hidden", "true");
-      const number = document.createElement("b");
-      number.textContent = String(link.order);
-      el.append(icon, number);
-      ["mousedown", "touchstart"].forEach(type => el.addEventListener(type, event => { event.stopPropagation(); kakao.maps.event.preventMap(); }));
-      el.addEventListener("click", event => { event.stopPropagation(); kakao.maps.event.preventMap(); onSpotRef.current(story.id); });
-      spotElsRef.current.set(story.id, el);
-      // Nearby places keep distinct hit targets; a stem and dot retain the real anchor.
-      const neighbours = spots.filter(item => item.place.point && Math.hypot(
-        (item.place.point.lat - place.point!.lat) * 111195,
-        (item.place.point.lng - place.point!.lng) * 111195 * Math.cos(place.point!.lat * Math.PI / 180)
-      ) < 60);
-      const shift = (neighbours.findIndex(item => item.story.id === story.id) - (neighbours.length - 1) / 2) * 60;
-      const anchor = document.createElement("div");
-      anchor.className = "spot-map-anchor";
-      el.style.left = `${shift - 25}px`;
-      const stem = document.createElement("i");
-      stem.className = "spot-map-stem";
-      stem.style.height = `${Math.hypot(shift, 12)}px`;
-      stem.style.transform = `rotate(${Math.atan2(shift, 12)}rad)`;
-      const dot = document.createElement("i");
-      dot.className = "spot-map-dot";
-      anchor.append(stem, dot, el);
-      const overlay = new kakao.maps.CustomOverlay({ position: new kakao.maps.LatLng(place.point.lat, place.point.lng), content: anchor, xAnchor: 0, yAnchor: 0, zIndex: 5 });
-      overlay.setMap(map);
-      overlays.push(overlay);
-    });
-    return () => { overlays.forEach(overlay => overlay.setMap(null)); spotElsRef.current.clear(); };
-  }, [spots, ready]);
-
-  useEffect(() => {
-    spotElsRef.current.forEach((el, id) => {
-      el.classList.toggle("is-selected", id === selectedSpotId);
-      el.setAttribute("aria-pressed", String(id === selectedSpotId));
-    });
-  }, [selectedSpotId, spots, ready]);
 
   useEffect(() => {
     if (!ready || !mapRef.current || !waypoints) return;
@@ -435,18 +371,6 @@ const KakaoMap = forwardRef<KakaoMapHandle, KakaoMapProps>(function KakaoMap(
   }, [selectedCourseId, ready]);
 
   useImperativeHandle(ref, () => ({
-    async captureAroundCurrentPosition(minutes, signal) {
-      const map = mapRef.current, kakao = window.kakao;
-      if (!map || !kakao) throw new ImageRouteError("MAP_UNAVAILABLE", "지도를 먼저 불러와야 해요. 잠시 후 다시 시도해주세요.");
-      const origin = await locateForSnapshot(signal);
-      signal.throwIfAborted();
-      currentPosRef.current = origin;
-      positionBeforeWalkRef.current = origin;
-      const pos = new kakao.maps.LatLng(origin.lat, origin.lng);
-      currentOverlayRef.current?.setPosition(pos);
-      map.panTo(pos);
-      return captureMapSnapshot(kakao, origin, minutes, signal);
-    },
     getCurrentPosition() {
       return { ...currentPosRef.current };
     },
